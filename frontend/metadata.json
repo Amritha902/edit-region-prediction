@@ -1,0 +1,5 @@
+{
+  "name": "Instruct Seg Edit",
+  "description": "An AI-powered image editing application. Segment objects, refine masks, and generate creative edits using generative AI.",
+  "requestFramePermissions": []
+}

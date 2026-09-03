@@ -1,0 +1,16 @@
+models/** 
+data/** 
+__pycache__/
+.vscode
+
+*.zip
+*.pyc
+*.jpg
+results/** 
+.env.venv/
+venv/
+models/
+__pycache__/
+*.pyc
+.env
+.DS_Store
