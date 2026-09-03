@@ -1,0 +1,33 @@
+# Instruct-Seg-Edit - Apple Silicon (M-series) requirements
+#
+# Differences from the CUDA requirements.txt, and why:
+#   - torch/torchvision: plain PyPI wheels. The +cu121 builds and every
+#     nvidia-*-cu12 package are CUDA-only and are dropped entirely.
+#   - nunchaku: REMOVED. It ships as a linux_x86_64 wheel with custom int4
+#     CUDA kernels, so the FLUX.1-Fill backend cannot run here at all.
+#     src/device.py falls back to the sd2 backend automatically.
+#   - triton: REMOVED. CUDA-only; there is no MPS equivalent.
+#   - tensorflow: not needed by the app branch.
+
+torch>=2.6
+torchvision
+ultralytics==8.3.209
+clip @ git+https://github.com/ultralytics/CLIP.git
+ftfy
+regex
+
+diffusers>=0.31
+transformers
+accelerate
+safetensors
+huggingface_hub
+
+opencv-python
+pillow
+numpy
+
+fastapi
+uvicorn[standard]
+python-multipart
+openai
+python-dotenv

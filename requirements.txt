@@ -1,0 +1,60 @@
+# Instruct-Seg-Edit dependencies
+#
+# Verified working on macOS 15 / Apple M5 / Python 3.10.20.
+#     python3.10 -m venv .venv && source .venv/bin/activate
+#     pip install -r requirements.txt
+#
+# The TensorFlow stack below is tightly version-locked. Read section 6.1 of the
+# README before changing any of the four pins marked (LOCKED).
+
+# --- Core numerics / data ---
+numpy<2.0                    # (LOCKED) pycocotools + TF 2.15 are not NumPy-2 clean
+pandas
+pyarrow                      # parquet reader for the PixelProse shards
+scikit-learn                 # TF-IDF caption similarity in eda.ipynb
+setuptools<81                # (LOCKED) vit-keras imports pkg_resources, removed in 81
+
+# --- Imaging ---
+Pillow
+opencv-python                # mask extraction (absdiff + threshold)
+pycocotools                  # RLE mask decoding in data_handler.py
+
+# --- Stage 4: segmentor (TensorFlow) ---
+# NOTE: do NOT use `tensorflow-macos` — the 2.15.1 wheel is a 2.2 kB placeholder
+# that installs no code. Plain `tensorflow` has arm64 support built in.
+tensorflow==2.15.1           # (LOCKED) ships Keras 2.15; Keras 3 breaks Losses (K.flatten)
+tensorflow-metal==1.2.0      # Apple GPU acceleration; omit on non-Apple hardware
+vit-keras==0.1.2             # (LOCKED) 0.2.0 requires Keras 3 (uses keras.ops)
+tensorflow-addons==0.23.0    # required by vit-keras 0.1.2
+
+# On NVIDIA/Linux, replace the four lines above with:
+#     tensorflow[and-cuda]==2.15.1
+#     vit-keras==0.1.2
+#     tensorflow-addons==0.23.0
+
+# --- Stage 2: edit generation ---
+torch
+torchvision
+diffusers                    # StableDiffusionInstructPix2PixPipeline
+transformers
+accelerate
+safetensors
+websocket-client             # ComfyUI websocket driver in generate_edits.ipynb
+
+# --- Stage 1: instruction generation ---
+openai                       # async client against the local OpenAI-compatible endpoint
+requests
+urllib3
+lmstudio                     # only for eda.ipynb; generate_prompts.ipynb uses openai
+python-dotenv
+
+# --- Data acquisition ---
+huggingface-hub              # downloading the PixelProse parquet shards
+
+# --- Notebook / plotting ---
+jupyter
+ipykernel
+matplotlib
+seaborn
+tqdm
+nest-asyncio                 # required by generate_prompts.ipynb inside Jupyter

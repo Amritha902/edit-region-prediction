@@ -1,0 +1,79 @@
+[
+  {
+    "case": 1,
+    "image": "000000000785.jpg",
+    "instruction": "make the skier's jacket blue",
+    "kind": "modify",
+    "truth": "the red jacket",
+    "coverage": 0.10707924582741478,
+    "blobs": 1,
+    "sec": 5.994232892990112,
+    "error": null
+  },
+  {
+    "case": 2,
+    "image": "000000000785.jpg",
+    "instruction": "remove the ski poles",
+    "kind": "remove",
+    "truth": "the two poles",
+    "coverage": 0.10707924582741478,
+    "blobs": 1,
+    "sec": 0.2780799865722656,
+    "error": null
+  },
+  {
+    "case": 3,
+    "image": "000000000785.jpg",
+    "instruction": "put a backpack on the skier",
+    "kind": "insert",
+    "truth": "EMPTY SPACE on her back",
+    "coverage": 0.10707924582741478,
+    "blobs": 1,
+    "sec": 0.22312235832214355,
+    "error": null
+  },
+  {
+    "case": 4,
+    "image": "000000000785.jpg",
+    "instruction": "add a pine tree on the left",
+    "kind": "insert",
+    "truth": "EMPTY SNOW, left third",
+    "coverage": 0.019126198508522728,
+    "blobs": 2,
+    "sec": 0.21953487396240234,
+    "error": null
+  },
+  {
+    "case": 5,
+    "image": "000000039769.jpg",
+    "instruction": "remove the cat on the left",
+    "kind": "remove",
+    "truth": "left cat only, not both",
+    "coverage": 0.20001220703125,
+    "blobs": 1,
+    "sec": 0.6654388904571533,
+    "error": null
+  },
+  {
+    "case": 6,
+    "image": "000000039769.jpg",
+    "instruction": "put a collar on the right cat",
+    "kind": "insert",
+    "truth": "EMPTY SPACE at its neck",
+    "coverage": 0.20001220703125,
+    "blobs": 1,
+    "sec": 0.2528970241546631,
+    "error": null
+  },
+  {
+    "case": 7,
+    "image": "000000002149.jpg",
+    "instruction": "make the front apple red",
+    "kind": "modify",
+    "truth": "one apple, not all",
+    "coverage": 0.17856528542258523,
+    "blobs": 1,
+    "sec": 0.23984217643737793,
+    "error": null
+  }
+]

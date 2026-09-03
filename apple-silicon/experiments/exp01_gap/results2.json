@@ -1,0 +1,79 @@
+[
+  {
+    "case": 1,
+    "image": "000000000785.jpg",
+    "text": "the skier's red jacket",
+    "kind": "modify",
+    "note": "jacket region exists as an object",
+    "n_candidates": 18,
+    "coverage": 0.11027941176470588,
+    "top_sim": 0.333740234375,
+    "margin": 0.057861328125
+  },
+  {
+    "case": 2,
+    "image": "000000000785.jpg",
+    "text": "the ski poles",
+    "kind": "remove",
+    "note": "poles exist as an object",
+    "n_candidates": 18,
+    "coverage": 0.11027941176470588,
+    "top_sim": 0.2880859375,
+    "margin": 0.001220703125
+  },
+  {
+    "case": 3,
+    "image": "000000000785.jpg",
+    "text": "a backpack on the skier",
+    "kind": "insert",
+    "note": "EMPTY - nothing to select",
+    "n_candidates": 18,
+    "coverage": 0.11027941176470588,
+    "top_sim": 0.302490234375,
+    "margin": 0.032958984375
+  },
+  {
+    "case": 4,
+    "image": "000000000785.jpg",
+    "text": "a pine tree on the left",
+    "kind": "insert",
+    "note": "EMPTY - nothing to select",
+    "n_candidates": 18,
+    "coverage": 0.012419117647058824,
+    "top_sim": 0.2264404296875,
+    "margin": 0.0035400390625
+  },
+  {
+    "case": 5,
+    "image": "000000039769.jpg",
+    "text": "the cat on the left",
+    "kind": "remove",
+    "note": "instance disambiguation",
+    "n_candidates": 10,
+    "coverage": 0.19992838541666666,
+    "top_sim": 0.267578125,
+    "margin": 0.0
+  },
+  {
+    "case": 6,
+    "image": "000000039769.jpg",
+    "text": "a collar on the right cat",
+    "kind": "insert",
+    "note": "EMPTY - nothing to select",
+    "n_candidates": 10,
+    "coverage": 0.19992838541666666,
+    "top_sim": 0.29150390625,
+    "margin": 0.0
+  },
+  {
+    "case": 7,
+    "image": "000000002149.jpg",
+    "text": "the front apple",
+    "kind": "modify",
+    "note": "instance disambiguation",
+    "n_candidates": 8,
+    "coverage": 0.11368925644028104,
+    "top_sim": 0.28955078125,
+    "margin": 0.00732421875
+  }
+]
