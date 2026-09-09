@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 800" width="1180" height="800">
+<defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#111"/>
+  </marker>
+  <style>
+    text{font-family:Helvetica,Arial,sans-serif;fill:#111}
+    .t{font-size:19px;font-weight:700}
+    .h{font-size:13px;font-weight:700;letter-spacing:1.3px}
+    .b{font-size:13px}
+    .s{font-size:11.5px;fill:#555}
+    .m{font-family:'SF Mono',Menlo,monospace;font-size:12px}
+    .box{fill:#fff;stroke:#111;stroke-width:1.6}
+    .froz{fill:#f2f2f2;stroke:#111;stroke-width:1.6}
+    .tren{fill:#fff;stroke:#111;stroke-width:3}
+    .ln{stroke:#111;stroke-width:1.6;fill:none;marker-end:url(#a)}
+    .dash{stroke:#111;stroke-width:1.3;fill:none;stroke-dasharray:5 4;marker-end:url(#a)}
+  </style>
+</defs>
+
+<text class="t" x="40" y="44">What is being trained</text>
+<text class="s" x="40" y="66">Frozen = grey.  Trainable = bold outline.  Only 1.4M of 72M parameters are learned.</text>
+<line x1="40" y1="80" x2="1140" y2="80" stroke="#111" stroke-width="1.2"/>
+
+<!-- DATA -->
+<text class="h" x="40" y="112">DATA  ·  MAGICBRUSH</text>
+<rect class="box" x="40" y="126" width="200" height="52" rx="3"/>
+<text class="b" x="52" y="147">source image</text><text class="s" x="52" y="166">real photo</text>
+<rect class="box" x="40" y="190" width="200" height="52" rx="3"/>
+<text class="b" x="52" y="211">target image</text><text class="s" x="52" y="230">real human edit</text>
+<rect class="box" x="40" y="254" width="200" height="52" rx="3"/>
+<text class="b" x="52" y="275">instruction</text><text class="s" x="52" y="294">"put a hat on the man"</text>
+
+<path class="ln" d="M240 152 L 300 152 L 300 205 L 318 205"/>
+<path class="ln" d="M240 216 L 318 216"/>
+<rect class="tren" x="322" y="182" width="196" height="66" rx="3"/>
+<text class="b" x="334" y="205">ΔE  in  L*a*b*</text>
+<text class="s" x="334" y="223">CIE76 difference, cleaned</text>
+<text class="s" x="334" y="239">→ the precise edit mask</text>
+
+<rect class="box" x="560" y="182" width="150" height="66" rx="3"/>
+<text class="b" x="572" y="207">TARGET MASK</text>
+<text class="s" x="572" y="226">160 × 160, binary</text>
+<path class="ln" d="M518 215 L 556 215"/>
+
+<text class="s" x="322" y="272">MagicBrush's own masks are 9.1× too large</text>
+<text class="s" x="322" y="290">(precision 15.8%, IoU 0.16) — we derive our own</text>
+
+<!-- MODEL -->
+<text class="h" x="40" y="356">MODEL</text>
+<line x1="40" y1="366" x2="1140" y2="366" stroke="#111" stroke-width="0.8"/>
+
+<rect class="froz" x="40" y="392" width="230" height="86" rx="3"/>
+<text class="b" x="52" y="416">FastSAM  ·  YOLOv8x-seg</text>
+<text class="s" x="52" y="435">frozen  ·  71,751,811 params</text>
+<text class="s" x="52" y="452">23 layers, class-agnostic</text>
+<text class="s" x="52" y="469">trained 6 / 100 epochs on SA-1B</text>
+<path class="ln" d="M155 178 L 155 386" />
+<text class="s" x="163" y="330">image</text>
+
+<rect class="froz" x="40" y="530" width="230" height="66" rx="3"/>
+<text class="b" x="52" y="554">CLIP text encoder</text>
+<text class="s" x="52" y="573">frozen  ·  ViT-B/32  ·  512-d</text>
+<path class="ln" d="M155 306 L 155 524"/>
+<text class="s" x="163" y="420">instruction</text>
+
+<rect class="froz" x="318" y="380" width="180" height="52" rx="3"/>
+<text class="b" x="330" y="401">32 prototypes</text><text class="s" x="330" y="420">(B, 32, 160, 160)</text>
+<path class="ln" d="M270 412 L 314 412"/>
+
+<rect class="froz" x="318" y="450" width="180" height="52" rx="3"/>
+<text class="b" x="330" y="471">image context</text><text class="s" x="330" y="490">SPPF pooled, 640-d</text>
+<path class="ln" d="M270 448 L 300 448 L 300 476 L 314 476"/>
+
+<rect class="froz" x="318" y="537" width="180" height="52" rx="3"/>
+<text class="b" x="330" y="558">text embedding</text><text class="s" x="330" y="577">512-d, normalised</text>
+<path class="ln" d="M270 563 L 314 563"/>
+
+<!-- HEAD -->
+<rect class="tren" x="560" y="450" width="230" height="140" rx="3"/>
+<text class="b" x="572" y="474">TRAINABLE HEAD</text>
+<text class="s" x="572" y="493">FiLM: text modulates image</text>
+<text class="m" x="572" y="514">v = γ(t)·v + β(t)</text>
+<text class="s" x="572" y="534">MLP → 32 coefficients + bias</text>
+<text class="s" x="572" y="556">1,399,073 parameters</text>
+<text class="s" x="572" y="576">the only thing that learns</text>
+<path class="ln" d="M498 476 L 556 490"/>
+<path class="ln" d="M498 563 L 556 545"/>
+
+<!-- COMBINE -->
+<rect class="box" x="840" y="392" width="300" height="120" rx="3"/>
+<text class="b" x="852" y="416">COMBINE</text>
+<text class="m" x="852" y="443">mask = σ( Σ cᵢ · protoᵢ + b )</text>
+<text class="s" x="852" y="468">The prototypes are spatial basis functions,</text>
+<text class="s" x="852" y="485">not objects. Coefficients from TEXT rather</text>
+<text class="s" x="852" y="502">than from a detection ⇒ output can be empty space.</text>
+<path class="ln" d="M498 406 L 836 430"/>
+<path class="ln" d="M790 500 L 836 480"/>
+
+<rect class="box" x="840" y="537" width="300" height="52" rx="3"/>
+<text class="b" x="852" y="558">PREDICTED EDIT REGION</text>
+<text class="s" x="852" y="577">160 × 160 logits</text>
+<path class="ln" d="M990 512 L 990 531"/>
+
+<!-- LOSS -->
+<rect class="tren" x="560" y="640" width="580" height="62" rx="3"/>
+<text class="b" x="572" y="663">LOSS   =   BCE   +   Dice</text>
+<text class="s" x="572" y="683">Edit regions average ~10% of the frame; BCE alone collapses to all-background, Dice is scale-invariant.</text>
+<path class="ln" d="M990 589 L 990 634"/>
+<path class="dash" d="M635 248 L 635 300 L 300 300 L 300 640 L 556 660"/>
+<text class="s" x="313" y="632">target mask supervises the loss</text>
+
+<!-- EVAL -->
+<text class="h" x="40" y="672">EVALUATED AGAINST</text>
+<text class="b" x="40" y="696">1.  no-text ablation</text><text class="s" x="40" y="713">instruction zeroed — isolates whether language does any work</text>
+<text class="b" x="40" y="737">2.  FastSAM + CLIP selection</text><text class="s" x="40" y="754">the 0 / 7 baseline</text>
+<text class="b" x="40" y="778">3.  MagicBrush's own masks</text><text class="s" x="330" y="778">IoU 0.16 against the true changed region</text>
+</svg>

@@ -6,3 +6,5 @@ models/
 data/coco/images/
 data/coco/*.parquet
 datagen/pairs/
+train/cache_*.pt
+train/*.pt
