@@ -140,7 +140,7 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  const r=[["gating mask","recall of the edit ↑","collateral change ↓","net ↑"],
   ["none — whole frame","33.3%","24.2%","+9.1%"],
   ["ours, as predicted","7.5%","1.5%","+6.0%"],
-  ["ours, tuned (thr 0.2, dilate 64px)","22.9%","8.8%","+14.2%"],
+  ["ours, tuned — peak of the sweep","22.9%","8.8%","+14.2%"],
   ["MagicBrush human mask","31.5%","13.0%","+18.5%"],
   ["ground-truth region","30.2%","0.1%","+30.1%"]];
  tbl(s,r,{y:1.88,colW:[4.2,2.6,2.6,2.23],rowH:0.40,fontSize:10.5,centerCols:[1,2,3],hiRows:[3]});
@@ -150,9 +150,9 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
   {x:M+0.3,y:4.98,w:5.5,h:0.9,fontFace:BODY,fontSize:11,color:GRN,lineSpacing:15,margin:0});
  tint(s,M+6.4,4.50,CW-6.4,1.55);
  lab(s,M+6.7,4.70,4.5,"And the diagnosis is precise");
- s.addText("Our mask is precision-biased — 1.5% collateral but only 7.5% recall, so gating discarded the edit. MagicBrush’s is the mirror: 9× too large, 13% collateral. Dilation trades one for the other.",
+ s.addText("Our mask is precision-biased — 1.5% collateral but only 7.5% recall, so gating discarded the edit. Dilation trades precision for recall; swept to 200 px, net peaks at 64 px and falls away either side.",
   {x:M+6.7,y:4.98,w:4.3,h:0.9,fontFace:BODY,fontSize:11,color:INK,lineSpacing:15,margin:0});
- s.addText("Coarse supervision costs at the editing stage too, not only on the mask metric: the MagicBrush mask loses 11.6 points of net against the ground-truth region.",
+ s.addText("Coarse supervision costs at the editing stage too, not only on the mask metric: the MagicBrush mask — measured 9.1× too large — loses 11.6 points of net against the ground-truth region.",
   {x:M,y:6.22,w:CW,h:0.5,fontFace:BODY,fontSize:10.5,color:MUTE,italics:true,lineSpacing:14,margin:0});
  s.addNotes("PH8b");}
 

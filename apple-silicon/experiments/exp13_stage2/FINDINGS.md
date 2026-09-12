@@ -33,8 +33,9 @@ the project that localization pays off downstream, not just on a mask metric.
 1.5% collateral but only 7.5% recall — gating discarded most of the edit, and
 net (+6.0%) fell *below* whole-frame editing. Dilating trades precision for
 recall: at threshold 0.2 and 64 px the net reaches **+14.2%, 1.56× the status
-quo**. The full sweep is monotone in dilation over the tested range, so the
-optimum may lie beyond 64 px.
+quo**. Swept to 200 px, net **peaks at 64 px** and declines monotonically beyond it
+(96 px +14.1%, 128 px +13.8%, 160 px +13.2%, 200 px +12.3%), so 64 px is the
+true optimum rather than the edge of the search.
 
 **Coarse supervision costs at the editing stage too.** The MagicBrush mask —
 measured in exp07 as 9.1× too large — carries 13.0% collateral and loses 11.6
