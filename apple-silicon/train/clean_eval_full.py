@@ -27,6 +27,8 @@ ap.add_argument("--seeds", type=int, default=12)
 ap.add_argument("--epochs", type=int, default=60)
 ap.add_argument("--configs", default="v1,v2")
 ap.add_argument("--out", default=str(HERE/"clean_eval_full.json"))
+ap.add_argument("--curves", action="store_true",
+                help="also log the zeroed-instruction control each epoch")
 A=ap.parse_args()
 
 dev=pick_device("auto")
@@ -44,12 +46,14 @@ for f in sorted(glob.glob(str(ROOT/"data/magicbrush/data/dev-*.parquet"))):
         if 0.004<=float(gt.mean())<=0.45: FULL.append(gt)
 print(f"train {TR.n}  dev {len(FULL)}\n", flush=True)
 
-def cache_iou(head, D, idx):
+def cache_iou(head, D, idx, zero_text=False):
     head.eval(); v=[]
     with torch.no_grad():
         for sl in batches(len(idx),48,False):
             j=idx[sl]
-            lg=head(D["text"][j].to(dev).float(), D["ctx"][j].to(dev).float(),
+            t=D["text"][j].to(dev).float()
+            if zero_text: t=torch.zeros_like(t)
+            lg=head(t, D["ctx"][j].to(dev).float(),
                     D["proto"][j].to(dev).float())
             p=(torch.sigmoid(lg)>0.5).float(); y=D["mask"][j].to(dev).float()
             inter=(p*y).sum((1,2,3)); union=((p+y)>0).float().sum((1,2,3)).clamp(min=1)
@@ -77,6 +81,7 @@ class V1(torch.nn.Module):
         co,b=s.h(t,c); return (torch.einsum("bc,bchw->bhw",co,p)+b[:,:,None]).unsqueeze(1)
 
 ALL_SEEDS=(1368,1,2,3,4,5,6,7,8,9,10,11)
+CURVES=[]
 
 def run(make,name,seeds,epochs):
     out=[]
@@ -89,8 +94,9 @@ def run(make,name,seeds,epochs):
         head=make().to(dev); npar=sum(p.numel() for p in head.parameters())
         opt=torch.optim.AdamW(head.parameters(),lr=1e-3,weight_decay=0.01)
         sch=torch.optim.lr_scheduler.CosineAnnealingLR(opt,T_max=epochs)
-        best=(-9,None)
+        best=(-9,None); curve=[]
         for ep in range(epochs):
+            tot=0.0; nb=0
             for sl in batches(len(ti),32,True,g):
                 j=ti[sl]
                 lg=head(TR["text"][j].to(dev).float(),TR["ctx"][j].to(dev).float(),
@@ -98,12 +104,22 @@ def run(make,name,seeds,epochs):
                 l,_,_=dice_bce_loss(lg,TR["mask"][j].to(dev).float(),w_dice=2.0)
                 opt.zero_grad(); l.backward()
                 torch.nn.utils.clip_grad_norm_(head.parameters(),1.0); opt.step()
+                tot+=float(l); nb+=1
             sch.step()
             s=cache_iou(head,TR,vi)                    # selection on TRAIN-val only
-            if s>best[0]: best=(s,{k:t.clone() for k,t in head.state_dict().items()})
+            # This was already computed for selection and then discarded. Keeping
+            # it costs nothing and is the only way to plot a learning curve. The
+            # zeroed-instruction pass is the one added cost (~10% of an epoch)
+            # and is what shows language is doing the work, not the image prior.
+            nt=cache_iou(head,TR,vi,zero_text=True) if A.curves else float("nan")
+            curve.append(dict(epoch=ep+1, loss=tot/max(nb,1), val_iou=s,
+                              val_iou_no_text=nt, delta=s-nt))
+            if s>best[0]: best=(s,{k:t.clone() for k,t in head.state_dict().items()}); best_ep=ep+1
         head.load_state_dict(best[1])
         i,byk=fullres(head)                            # dev touched once
-        out.append((i,byk))
+        out.append((i,byk)); CURVES.append(dict(config=name,seed=sd,best_epoch=best_ep,
+                                                dev_iou=i,curve=curve))
+        json.dump(CURVES, open(HERE/"curves_full.json","w"), indent=2)
         print(f"    seed {sd}: dev full-res IoU {i:.4f}  ({(time.time()-t0)/60:.1f} min)",flush=True)
         # Dump after every seed, not every config: a 9-hour run that dies in
         # seed 10 should not lose the nine that finished.
