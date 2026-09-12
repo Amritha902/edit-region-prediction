@@ -135,6 +135,27 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  tbl(s,r,{y:5.30,colW:[2.6,9.03],rowH:0.42,fontSize:10});
  s.addNotes("PH7");}
 
+/* 8 STAGE 2 */
+{const s=slide("Stage 2","Editing inside the predicted region — the premise, tested","60 held-out dev samples · one editor (InstructPix2Pix), only the gating mask varies");
+ const r=[["gating mask","recall of the edit ↑","collateral change ↓","net ↑"],
+  ["none — whole frame","33.3%","24.2%","+9.1%"],
+  ["ours, as predicted","7.5%","1.5%","+6.0%"],
+  ["ours, tuned (thr 0.2, dilate 64px)","22.9%","8.8%","+14.2%"],
+  ["MagicBrush human mask","31.5%","13.0%","+18.5%"],
+  ["ground-truth region","30.2%","0.1%","+30.1%"]];
+ tbl(s,r,{y:1.88,colW:[4.2,2.6,2.6,2.23],rowH:0.40,fontSize:10.5,centerCols:[1,2,3],hiRows:[3]});
+ tint(s,M,4.50,6.1,1.55,"EAF5EE");
+ lab(s,M+0.3,4.70,5.5,"The premise holds",{color:GRN});
+ s.addText("Editing inside the correct region is worth 3.3× — net +30.1% against +9.1% for editing the whole frame. Our tuned mask reaches +14.2%, 1.56× better than the status quo.",
+  {x:M+0.3,y:4.98,w:5.5,h:0.9,fontFace:BODY,fontSize:11,color:GRN,lineSpacing:15,margin:0});
+ tint(s,M+6.4,4.50,CW-6.4,1.55);
+ lab(s,M+6.7,4.70,4.5,"And the diagnosis is precise");
+ s.addText("Our mask is precision-biased — 1.5% collateral but only 7.5% recall, so gating discarded the edit. MagicBrush’s is the mirror: 9× too large, 13% collateral. Dilation trades one for the other.",
+  {x:M+6.7,y:4.98,w:4.3,h:0.9,fontFace:BODY,fontSize:11,color:INK,lineSpacing:15,margin:0});
+ s.addText("Coarse supervision costs at the editing stage too, not only on the mask metric: the MagicBrush mask loses 11.6 points of net against the ground-truth region.",
+  {x:M,y:6.22,w:CW,h:0.5,fontFace:BODY,fontSize:10.5,color:MUTE,italics:true,lineSpacing:14,margin:0});
+ s.addNotes("PH8b");}
+
 /* 8 HONEST LIMITS */
 {const s=slide("What we checked on ourselves","Every number here survived an attempt to break it",null);
  const r=[["Check","What it caught"],
