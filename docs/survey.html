@@ -1,0 +1,305 @@
+<title>Locating the Edit Region</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{
+  --paper:#fdfdfc; --ink:#1b1a17; --ink-2:#4a4842; --ink-3:#797770;
+  --rule:#1b1a17; --hair:#c9c6bd; --link:#3a5f8a; --flag:#8a4a2c;
+  --serif:"Crimson Pro",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#16161a; --ink:#e6e4de; --ink-2:#b3b0a8; --ink-3:#8a8780;
+    --rule:#e6e4de; --hair:#3a3a3f; --link:#8fb4dd; --flag:#d08f6a;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16161a; --ink:#e6e4de; --ink-2:#b3b0a8; --ink-3:#8a8780;
+  --rule:#e6e4de; --hair:#3a3a3f; --link:#8fb4dd; --flag:#d08f6a;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:19px;line-height:1.54;margin:0;padding:0 22px 90px;
+  font-variant-numeric:oldstyle-nums proportional-nums;}
+.wrap{max-width:40em;margin:0 auto}
+/* title */
+.titleblock{padding:74px 0 0;text-align:center}
+.titleblock .kind{font-size:14px;letter-spacing:.06em;color:var(--ink-3);
+  font-variant:small-caps;margin:0 0 20px}
+h1{font-weight:600;font-size:31px;line-height:1.22;letter-spacing:-.006em;
+  margin:0 auto 10px;max-width:22em;text-wrap:balance}
+.titleblock .sub{font-size:19px;color:var(--ink-2);font-style:italic;
+  margin:0 auto 26px;max-width:30em;text-wrap:balance}
+.authors{font-size:17px;margin:0 0 4px}
+.affil{font-size:15px;color:var(--ink-2);margin:4px 0 0;font-style:italic}
+.dateline{font-size:14px;color:var(--ink-3);margin:14px 0 0;font-variant:small-caps;letter-spacing:.04em}
+hr.rule{border:0;border-top:1px solid var(--rule);margin:34px 0 0}
+/* abstract: indented block, no box */
+.abs{margin:30px auto 0;max-width:34em;font-size:17.5px;line-height:1.5;color:var(--ink-2)}
+.abs .lbl{font-variant:small-caps;letter-spacing:.05em;color:var(--ink);font-size:15px}
+.abs p{margin:8px 0}
+/* sections */
+h2{font-weight:600;font-size:20px;margin:44px 0 2px;line-height:1.3;text-wrap:balance}
+h2 .n{color:var(--ink-3);font-weight:400;margin-right:.5em;font-variant-numeric:lining-nums}
+h3{font-weight:600;font-size:17.5px;margin:26px 0 2px;font-style:italic}
+h3 .n{color:var(--ink-3);font-weight:400;font-style:normal;margin-right:.45em;font-variant-numeric:lining-nums}
+p{margin:10px 0;text-align:justify;hyphens:auto}
+p.first{text-indent:0}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid var(--hair)}
+a:hover{border-bottom-color:var(--link)}
+ul,ol{margin:10px 0;padding-left:1.4em}
+li{margin:5px 0}
+code{font-family:var(--mono);font-size:.82em}
+.m{font-family:var(--mono);font-size:.82em;font-variant-numeric:lining-nums tabular-nums}
+/* remark: indented smaller type, no rail, no box */
+.remark{margin:18px 0 18px 1.6em;padding-left:1.1em;border-left:1px solid var(--hair);
+  font-size:17px;color:var(--ink-2)}
+.remark .rl{font-variant:small-caps;letter-spacing:.05em;color:var(--ink);font-size:14.5px;
+  display:block;margin-bottom:3px}
+.remark.flag .rl{color:var(--flag)}
+.remark p{margin:6px 0}
+/* booktabs tables */
+.tw{overflow-x:auto;margin:22px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;
+  font-variant-numeric:lining-nums tabular-nums;font-family:var(--serif)}
+caption{caption-side:top;text-align:left;font-size:15px;color:var(--ink-2);
+  padding:0 0 8px;line-height:1.4}
+caption .cn{font-variant:small-caps;letter-spacing:.05em;color:var(--ink)}
+thead th{font-weight:600;text-align:right;padding:5px 11px;
+  border-top:1.3px solid var(--rule);border-bottom:.6px solid var(--rule);
+  font-variant:small-caps;letter-spacing:.03em;font-size:14px}
+thead th:first-child{text-align:left}
+tbody td{padding:5px 11px;text-align:right;vertical-align:top}
+tbody td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:1.3px solid var(--rule)}
+tr.hi td{font-weight:600}
+tfoot td{border:0;padding:9px 11px 0;font-size:14px;color:var(--ink-3);
+  text-align:left;line-height:1.45}
+table.lit{font-size:14px}
+table.lit td{padding:7px 9px;text-align:left;line-height:1.4}
+table.lit thead th{text-align:left;padding:5px 9px}
+.vid{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
+  font-variant-numeric:lining-nums}
+/* figures */
+figure{margin:26px 0}
+figure img{width:100%;height:auto;display:block}
+figcaption{font-size:15px;line-height:1.45;color:var(--ink-2);margin-top:8px}
+figcaption .cn{font-variant:small-caps;letter-spacing:.05em;color:var(--ink)}
+/* year histogram, drawn not carded */
+.hist{display:flex;align-items:flex-end;gap:20px;height:132px;margin:24px 0 6px;
+  padding-bottom:0;border-bottom:1px solid var(--rule)}
+.yr{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.ybar{width:60%;background:var(--ink);min-height:2px}
+.yn{font-size:13px;color:var(--ink-2);order:-1;margin-bottom:4px;
+  font-variant-numeric:lining-nums}
+.yl{font-size:13.5px;color:var(--ink-3);margin-top:6px;font-variant-numeric:lining-nums}
+.histlab{font-size:14px;color:var(--ink-3);margin:22px 0 0;font-style:italic}
+ol.refs{font-size:15px;line-height:1.45;padding-left:1.8em}
+ol.refs li{margin:7px 0}
+footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--hair);
+  font-size:14px;color:var(--ink-3);text-align:center;font-style:italic}
+@media (max-width:680px){
+  body{font-size:17.5px;padding:0 16px 60px}
+  h1{font-size:25px}.titleblock{padding-top:46px}
+  p{text-align:left;hyphens:none}
+  .remark{margin-left:0}
+}
+@media print{body{font-size:10.5pt;padding:0}figure,table,.remark{page-break-inside:avoid}}
+</style>
+<div class="wrap">
+<div class="titleblock">
+  <p class="kind">Literature Survey · Foundations of Data Science · Review 1</p>
+  <h1>Locating the Edit Region</h1>
+  <p class="sub">Forty-five works, 2024–2026, on where an instruction says to edit — and why none of them answers the question</p>
+  <p class="authors">Amritha S <span class="m">23BEC1368</span> &nbsp;·&nbsp; Yugeshwaran P <span class="m">23BEC1404</span></p>
+  <p class="affil">Guide: Dr. Saranya M (54783) · School of Electronics Engineering, VIT Chennai</p>
+  <p class="dateline">13 September 2026</p>
+</div>
+<hr class="rule">
+
+<div class="abs">
+  <span class="lbl">Abstract</span>
+  <p>Instruction-guided image editing has advanced quickly, but almost entirely on the assumption that the region to edit is already known. We survey 45 works published between 2024 and 2026 and find the field divides into those that <em>consume</em> a region and those that <em>read</em> one out of a generator's internals — with exactly one line of work that <em>predicts</em> a region from the instruction itself.</p>
+  <p>Four gaps follow, and we state what we measured against each rather than asserting them. The sharpest is that no benchmark scores a predicted edit region: the closest, LocateEdit-Bench, performs post-hoc forensics on edits that already happened. That absence is why a 2026 paper whose headline contribution is a MaskPredictor can omit a mask IoU without objection.</p>
+</div>
+
+<h2><span class="n">1</span>Scope and selection</h2>
+<p class="first">Papers were included if they bear on <em>where</em> an instruction-guided edit should happen: editors whose localization is implicit, methods that read or consume regions, insertion and affordance work, text-guided segmentation, benchmarks, and the surveys that frame the area. Patents were included where they claim region generation, because the commercial position matters for a novelty argument.</p>
+<p>Every work is <strong>2024 or later</strong> — a three-year window as of September 2026. Two foundational works fall outside it and are therefore cited as method components rather than as related work: <a href="https://arxiv.org/abs/2306.12156">FastSAM</a> (2023), whose YOLACT-style prototypes are the basis our head predicts coefficients over, and <a href="https://arxiv.org/abs/2308.00692">LISA</a> (2023), which founded reasoning segmentation. Excluding them from the survey keeps the window honest; pretending we do not build on them would not be.</p>
+<p>Each entry carries a relevance score from 1 to 5. A <strong>5</strong> means the work either defines our problem, bounds it, or is the specific thing we must beat; 16 of the 45 qualify and are set in bold in the tables below. All 45 links resolve, and 42 PDFs are archived alongside the matrix.</p>
+
+<div class="hist"><div class="yr"><div class="yn">6</div><div class="ybar" style="height:30%"></div><div class="yl">2024</div></div><div class="yr"><div class="yn">20</div><div class="ybar" style="height:100%"></div><div class="yl">2025</div></div><div class="yr"><div class="yn">19</div><div class="ybar" style="height:95%"></div><div class="yl">2026</div></div></div>
+<p class="histlab">Publication year. Thirty-nine of 45 works are from 2025 or 2026 — the problem is being actively worked on, which is an argument for the project and a constraint on its novelty.</p>
+
+<h2><span class="n">2</span>How the field divides</h2>
+<p class="first">Sorting the 45 works by what they do with a region rather than by venue or method produces a cleaner picture than a chronological reading. Three postures account for almost everything:</p>
+<div class="tw"><table>
+<caption><span class="cn">Table 1.</span> The 45 works by what they do with the edit region.</caption>
+<thead><tr><th>Posture</th><th>Works</th><th>Representative</th><th>What it implies for us</th></tr></thead>
+<tbody>
+<tr><td>Consumes a region given to it</td><td class="m">17</td><td>NEP, MaskFlow, LazyDiffusion</td><td>Demand exists; supply is assumed</td></tr>
+<tr><td>Reads a region from model internals</td><td class="m">11</td><td>WhereEdit, RegionE, Rethinking Where</td><td>Unsupervised, and blind to empty space</td></tr>
+<tr class="hi"><td>Predicts a region from the instruction</td><td class="m">2</td><td>AdaptEdit, MADiff</td><td>Our formulation — and it is nearly vacant</td></tr>
+<tr><td>Scores or frames the problem</td><td class="m">15</td><td>LocateEdit-Bench, surveys</td><td>None scores a predicted region</td></tr>
+</tbody></table></div>
+<p>The middle row is the finding. Of 45 recent works on instruction-guided editing and its localization, <strong>two</strong> train something to produce the edit region from language, and one of those is domain-locked to fashion.</p>
+
+<h2><span class="n">3</span>Edit localization <span style="color:var(--ink-3);font-weight:400">(7)</span></h2>
+<p>This is the cluster our work sits in, and it splits cleanly in two. One half <em>reads</em> a region out of a generator that is already running: <a href="https://arxiv.org/abs/2604.20258">Rethinking Where to Edit</a> takes attention cues from the source and target streams, and <a href="https://arxiv.org/abs/2607.20883">WhereEdit</a> sequence-matches changed prompt tokens and aggregates cross-attention into a mask. Both are training-free and need no supervision, which is their appeal. Both also inherit the limits of what attention happens to highlight: WhereEdit states outright that it does not handle adding into empty regions, and the attention reader keeps the largest connected component, so repeated instances break it.</p>
+<p>The other half <em>consumes</em> a region someone else produced. <a href="https://arxiv.org/abs/2608.06929">MaskFlow</a> folds the mask into the probability path of a flow-matching objective, which is elegant precisely because it assumes the mask exists. <a href="https://arxiv.org/abs/2412.20062">MADiff</a> is the closest structural precedent — predict a mask, then edit through it — but it is scoped to fashion, and it predicts over garments that are already present.</p>
+<p>Our base paper, <a href="https://arxiv.org/abs/2604.23763">AdaptEdit</a>, is the only work that trains a predictor to ground the region from the instruction itself. That is our exact formulation. The opening it leaves is not its architecture but its supervision: its masks come from MagicBrush human annotation and rendered text boxes, explicitly not from pixel differences — and human annotation cannot express where a hat <em>should</em> go when there is no hat.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2604.23763">*** AdaptEdit / Edit Where You Mean *** [BASE PAPER]</a><br><span class="vid">2604.23763 · DiT-scale (adapters lightweight)</span></td><td class="m">2026</td><td>GEdit-Bench per-category (subject-add 8.28, text_change 8.53, color_alter 7.93); background preservation; removes need for user mask</td><td>Masks from MagicBrush human annotation + rendered text boxes ONLY - explicitly not pixel-difference or attention. Its own limitations name insertion into empty space as unsolved (&#x27;put a hat on the dog where the dog has no hat&#x27;)</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2604.20258">Rethinking Where to Edit: Task-Aware Localization</a><br><span class="vid">2604.20258 · 0 (training-free)</span></td><td class="m">2026</td><td>Over-editing reduction, background preservation, per-operation localization</td><td>Unsupervised; keeps largest connected component so repeated instances break; no empty space</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2607.20883">WhereEdit: Mask-aware Local Latent Editing for One-Step Editing</a><br><span class="vid">2607.20883 · 0 (training-free)</span></td><td class="m">2026</td><td>One-step editing quality, CLIP-Edited 22.66 to 23.63 with GT masks</td><td>Mask derived during inference, not predicted from instruction; explicitly does not handle adding into empty space</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2608.06929">MaskFlow: Precise, Consistent and Seamless Regional Editing</a><br><span class="vid">2608.06929 · -</span></td><td class="m">2026</td><td>Boundary seamlessness, regional consistency</td><td>Assumes the mask already exists - it is a consumer of a region</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2510.16772">Region in Context: Text-Conditioned Editing with Semantic Reasoning</a><br><span class="vid">2510.16772 · -</span></td><td class="m">2025</td><td>Context-consistent local edits</td><td>Region still tied to existing content</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2412.20062">MADiff: Text-Guided Fashion Editing with Mask Prediction</a><br><span class="vid">2412.20062 · -</span></td><td class="m">2024</td><td>Fashion edit precision</td><td>Domain-limited (fashion); predicts over existing garments only</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2507.23300">Training-free Geometric Image Editing</a><br><span class="vid">2507.23300 · 0</span></td><td class="m">2025</td><td>Geometric manipulation fidelity</td><td>Geometry is given by the user, not inferred from language</td></tr></tbody></table></div>
+<h2><span class="n">4</span>Instruction editors <span style="color:var(--ink-3);font-weight:400">(9)</span></h2>
+<p>Nine works, and the pattern is uniform: they are excellent at editing and silent about localization. <a href="https://arxiv.org/abs/2504.17761">Step1X-Edit</a> parses the instruction into editing tokens with an MLLM and decodes with a DiT; Qwen-Image-Edit and FLUX.1 Kontext ship 12–32 B open-weight editors. In each, the decision of which pixels to change is internal, implicit, and never scored.</p>
+<p>One work makes the asymmetry explicit. <a href="https://arxiv.org/abs/2508.06044">NEP</a> conditions on text tokens, source image tokens <em>and edit-region mask tokens</em> — the region is an <strong>input</strong>. It consumes a region; it never produces one. Read across the cluster, these papers define the demand side of the problem we are on the supply side of.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2508.06044">NEP: Autoregressive Image Editing via Next Editing Token Prediction</a><br><span class="vid">2508.06044 · -</span></td><td class="m">2025</td><td>Region-based editing precision</td><td>CRITICAL: the edit-region mask is an INPUT. It consumes a region, never produces one</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2605.10859">EditMGT: Masked Generative Transformer Is What You Need</a><br><span class="vid">2605.10859 · -</span></td><td class="m">2026</td><td>Localization sharpness, edit fidelity</td><td>Localization read from attention only; unsupervised</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2504.17761">Step1X-Edit: A Practical Framework for General Image Editing</a><br><span class="vid">2504.17761 · 19B</span></td><td class="m">2025</td><td>GEdit-Bench score, instruction following, open-source parity with GPT-4o</td><td>Localization is internal and implicit; region never exposed or scored</td></tr>
+<tr><td>Qwen-Image-Edit (2509 / 2511 / 2.0)<br><span class="vid">Alibaba release · 20B</span></td><td class="m">2026</td><td>Semantic adherence, 2K native output, text rendering</td><td>No explicit region; 20B is far beyond consumer hardware</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2603.21176">GIDE: Unlocking Diffusion LLMs for Precise Training-Free Editing</a><br><span class="vid">2603.21176 · -</span></td><td class="m">2026</td><td>Precision without training</td><td>No supervised region; relies on model internals</td></tr>
+<tr><td>FLUX.1 Kontext [dev] / FLUX.2<br><span class="vid">Black Forest Labs · 12B / 32B</span></td><td class="m">2025</td><td>In-context editing quality, multi-reference composition</td><td>Region never exposed; cannot run on a laptop</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2508.15772">Visual Autoregressive Modeling for Instruction-Guided Editing</a><br><span class="vid">2508.15772 · -</span></td><td class="m">2025</td><td>Inference efficiency vs diffusion, instruction adherence</td><td>Same implicit localization problem</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2506.04158">Image Editing As Programs</a><br><span class="vid">2506.04158 · -</span></td><td class="m">2025</td><td>Compositional/multi-step instruction handling</td><td>Program is semantic, not spatial; no region output</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2508.06937">CannyEdit: Selective Canny Control and Dual-Prompt Guidance</a><br><span class="vid">2508.06937 · -</span></td><td class="m">2025</td><td>Structure preservation, training-free</td><td>Requires an external control signal (edges)</td></tr></tbody></table></div>
+<h2><span class="n">5</span>Insertion and affordance <span style="color:var(--ink-3);font-weight:400">(4)</span></h2>
+<p>Insertion is the case our project exists for, and this cluster shows the field has converged on solving it <em>given a location</em>. <a href="https://arxiv.org/abs/2412.14462">MADD</a> denoises the RGB image and the insertion mask jointly in a dual stream — genuinely predicting mask geometry — but requires a position prompt: you tell it where. <a href="https://arxiv.org/abs/2411.07232">Add-it</a> places objects through weighted extended attention with no training at all, so placement emerges rather than being predicted.</p>
+<p>The patent literature says the same thing in legal language. US12561956 requires "an original image with a marked region"; US12462449B2 generates per-layer blending masks inside a generator, not a region in empty space. Across research and patents alike, <strong>the location is an input.</strong>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td>US12462449B2 - Mask conditioned image transformation (patent, Adobe)<br><span class="vid">USPTO patent · -</span></td><td class="m">2025</td><td>Text-conditioned local edit blending</td><td>Per-layer blending masks inside a generator; does NOT cover insertion into empty regions</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2412.14462">MADD: Affordance-Aware Object Insertion (Dual Diffusion)</a><br><span class="vid">2412.14462 · -</span></td><td class="m">2024</td><td>Affordance-consistent insertion across position prompt types</td><td>CRITICAL: requires a POSITION PROMPT. You tell it where. It does not infer location from language alone</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2411.07232">Add-it: Training-Free Object Insertion</a><br><span class="vid">2411.07232 · 0 (training-free)</span></td><td class="m">2024</td><td>Affordance 47% to 83%; structural consistency</td><td>Training-free and unsupervised; placement emerges from attention, not a predicted region</td></tr>
+<tr><td>US12561956 - Affordance-based reposing of an object (patent)<br><span class="vid">USPTO patent · -</span></td><td class="m">2025</td><td>Insertion realism</td><td>Requires &#x27;an original image with A MARKED REGION&#x27; - location is given</td></tr></tbody></table></div>
+<h2><span class="n">6</span>Region-aware efficiency <span style="color:var(--ink-3);font-weight:400">(3)</span></h2>
+<p>Three works exploit regions to save computation, and all three assume the region arrives from somewhere else. <a href="https://arxiv.org/abs/2510.25590">RegionE</a> skips denoising in unchanged areas — but infers the region from an initial denoising pass, i.e. after generation has begun. <a href="https://arxiv.org/abs/2512.22323">SpotEdit</a> skips stable regions by perceptual similarity. <a href="https://arxiv.org/abs/2404.12382">LazyDiffusion</a> synthesises only the masked region from a compact global context, and requires a user-drawn mask.</p>
+<p>This cluster matters to us for a reason beyond motivation: it establishes that a cheap, reusable per-image representation with a cheap per-instruction query is a recognised and valuable structure. That is exactly the split our architecture has, and it is where our latency advantage comes from.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2510.25590">RegionE: Adaptive Region-Aware Generation</a><br><span class="vid">2510.25590 · 0</span></td><td class="m">2026</td><td>2.57x / 2.41x / 2.06x on Step1X-Edit, FLUX.1 Kontext, Qwen-Image-Edit; PSNR 30.5-32.1</td><td>Infers the region from an initial denoising pass - i.e. AFTER generation begins, not from the instruction</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2512.22323">SpotEdit: Selective Region Editing in Diffusion Transformers</a><br><span class="vid">2512.22323 · 0</span></td><td class="m">2025</td><td>1.95x speedup, fidelity preserved; orthogonal to other DiT accelerations</td><td>Consumes a region; does not produce one from language</td></tr>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2404.12382">LazyDiffusion: Lazy Diffusion Transformer</a><br><span class="vid">2404.12382 · -</span></td><td class="m">2024</td><td>~10x speedup at 10% mask; global context retained vs tight crop</td><td>REQUIRES A USER-DRAWN MASK. Frames the crop-vs-full-context tradeoff but never predicts the region</td></tr></tbody></table></div>
+<h2><span class="n">7</span>Text-guided segmentation <span style="color:var(--ink-3);font-weight:400">(5)</span></h2>
+<p>The obvious thing to try is a referring segmenter, and this cluster is why that fails. Referring segmentation returns what a phrase <em>denotes</em>. For "put a hat on the man", the phrase denotes the man; the region that must change is the empty space above his head. The <a href="https://arxiv.org/abs/2508.00265">referring-segmentation survey</a> makes the distinction we rely on explicit.</p>
+<p>We measured the consequence rather than assuming it. CLIPSeg — the standard referring segmenter, 150.7 M parameters — scores <span class="m">0.1849</span> IoU overall on our task but only <span class="m">0.054</span> on insertions, its worst category and our best margin. <a href="https://arxiv.org/abs/2608.01077">VespaSeg</a> is an important precedent in the other direction: LoRA on a MobileSAM decoder proves lightweight text-conditioned segmentation is viable, which is the bet our 4.7 M head makes.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2608.01077">VespaSeg: Resource-Aware Ground-then-Segment RES</a><br><span class="vid">2608.01077 · Lightweight</span></td><td class="m">2026</td><td>Resource-aware referring segmentation; strong accuracy at low cost</td><td>Referring semantics. IMPORTANT PRECEDENT: proves lightweight text-conditioned segmentation is viable</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2604.18562">AnchorSeg: Language Grounded Query Banks</a><br><span class="vid">2604.18562 · -</span></td><td class="m">2026</td><td>Reasoning segmentation accuracy</td><td>Referring semantics</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2605.20110">SetCon: Open-Ended Referring Segmentation</a><br><span class="vid">2605.20110 · -</span></td><td class="m">2026</td><td>Open-vocabulary referring segmentation</td><td>Referring semantics</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2607.04779">DGSeg: Dynamic Gating of Semantic-Spatial Predictions</a><br><span class="vid">2607.04779 · -</span></td><td class="m">2026</td><td>Reasoning segmentation robustness</td><td>Referring semantics</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2512.24023">RSAgent: Reason and Act for Text-Guided Segmentation</a><br><span class="vid">2512.24023 · -</span></td><td class="m">2025</td><td>Complex query segmentation via tool use</td><td>Agentic overhead; referring semantics</td></tr></tbody></table></div>
+<h2><span class="n">8</span>Benchmarks and metrics <span style="color:var(--ink-3);font-weight:400">(4)</span></h2>
+<p>Four works, and none of them scores what we produce. <a href="https://arxiv.org/abs/2602.05577">LocateEdit-Bench</a> comes closest by name and is the furthest in substance: 231 K images, three edit types, two protocols — all scoring localization of edits that <em>already occurred</em>. It is post-hoc forensics on a finished edit, not an evaluation of a region predicted beforehand. GEdit-Bench and the region/semantic metric score the output image.</p>
+<p>This absence is why our project reports a mask IoU at all, and why the base paper could omit one without reviewers objecting: <strong>there is no benchmark whose leaderboard would have exposed it.</strong>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2602.05577">LocateEdit-Bench: Benchmark for Editing Localization</a><br><span class="vid">2602.05577 · -</span></td><td class="m">2026</td><td>Standardises evaluation of edit localization methods</td><td>Scores localization of edits that ALREADY OCCURRED (post-hoc forensics). Does not score a region predicted BEFORE editing</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2506.13827">Balancing Preservation and Modification: Region+Semantic Metric</a><br><span class="vid">2506.13827 · -</span></td><td class="m">2025</td><td>Better correlation with human judgement than CLIP-only</td><td>Scores the output image, not the predicted region</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2504.17761">GEdit-Bench (via Step1X-Edit)</a><br><span class="vid">2504.17761 · -</span></td><td class="m">2025</td><td>subject-add 8.28, text_change 8.53, color_alter 7.93, motion_change 3.63</td><td>Scores the edited image only; edit region never evaluated</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2411.07232">Adding Affordance Benchmark (via Add-it)</a><br><span class="vid">2411.07232 · -</span></td><td class="m">2024</td><td>Affordance plausibility 47% to 83%</td><td>Human-annotated; small; measures plausibility not predicted region IoU</td></tr></tbody></table></div>
+<h2><span class="n">9</span>Planning and reasoning <span style="color:var(--ink-3);font-weight:400">(4)</span></h2>
+<p>These works decompose hard instructions before editing. <a href="https://arxiv.org/abs/2507.05259">X-Planner</a> breaks complex instructions into steps; RePlan adds region-aligned guidance with an MLLM planner. The planning is semantic — <em>what</em> to do, in what order — and stops short of <em>where</em>, in pixels. They also put a multi-billion-parameter model in the loop for a decision our 4.7 M head makes in 5.3 ms.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr><td>RePlan: Reasoning-Guided Region Planning<br><span class="vid">ECCV 2026 · MLLM-scale</span></td><td class="m">2026</td><td>Fine-grained visual reasoning, background consistency without massive paired data</td><td>Needs an MLLM in the loop; heavy</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2507.05259">X-Planner: Complex Instruction-Based Editing</a><br><span class="vid">2507.05259 · -</span></td><td class="m">2025</td><td>Complex/multi-step instruction success</td><td>Planning is semantic, not spatial; still no region</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2506.21546">Counterfactual Segmentation Reasoning</a><br><span class="vid">2506.21546 · -</span></td><td class="m">2025</td><td>Grounding reliability</td><td>Diagnostic; not an editing localizer</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2410.18923">SegLLM: Multi-round Reasoning Segmentation</a><br><span class="vid">2410.18923 · -</span></td><td class="m">2024</td><td>Multi-turn segmentation consistency</td><td>Referring semantics; segments existing objects</td></tr></tbody></table></div>
+<h2><span class="n">10</span>Structured scene representations <span style="color:var(--ink-3);font-weight:400">(6)</span></h2>
+<p>Six works build persistent structure over a scene. <a href="https://arxiv.org/abs/2601.03741">I2E</a> performs instance-level amodal decomposition with depth-aware ordering; layer-wise memory stores latents across sequential edits. The common limit is that they represent <em>things that exist</em>. None of them makes empty space addressable, and none measures reuse across many instructions on one image — the amortisation axis our architecture is built on.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2601.03741">I2E: From Image Pixels to Interactive Environments</a><br><span class="vid">2601.03741 · -</span></td><td class="m">2026</td><td>Structured manipulable scene for text-guided editing</td><td>Represents existing objects and layers; no actionable empty space; no reuse-across-instruction measurement</td></tr>
+<tr><td>Follow-Your-Shape: Trajectory-Guided Region Control<br><span class="vid">ICLR 2026 · 0</span></td><td class="m">2026</td><td>Shape edit precision while preserving non-target content</td><td>Shape-change focused; region emerges from trajectories not language</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2505.01079">Layer-wise Memory for Sequential Editing</a><br><span class="vid">2505.01079 · -</span></td><td class="m">2025</td><td>Consistency across sequential edits</td><td>Memory is for consistency, not a queryable spatial substrate</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2606.14168">MUSE: Agentic 3D Scene Authoring via Memory</a><br><span class="vid">2606.14168 · -</span></td><td class="m">2026</td><td>Incremental 3D authoring, non-target preservation</td><td>3D scene authoring, not 2D image editing</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2511.13713">Free-Form Scene Editor: Multi-Round Object Manipulation</a><br><span class="vid">2511.13713 · -</span></td><td class="m">2025</td><td>Multi-round object manipulation consistency</td><td>Object-centric; assumes objects exist</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2606.09273">EditSSC: Editable Semantic Occupancy</a><br><span class="vid">2606.09273 · -</span></td><td class="m">2026</td><td>Sketch/inpaint/outpaint guided occupancy editing</td><td>3D occupancy domain</td></tr></tbody></table></div>
+<h2><span class="n">11</span>Surveys <span style="color:var(--ink-3);font-weight:400">(3)</span></h2>
+<p>Three surveys frame the field. The <a href="https://arxiv.org/abs/2607.25642">2026 instruction-editing survey</a> confirms the structural point: localization is treated as a sub-component of editing, not a first-class output with its own metric. The referring-segmentation survey supplies the semantic distinction we depend on, and the affordance survey shows affordance prediction has been developed for robotics rather than for edit localization.</p>
+<div class="tw"><table class="lit"><thead><tr><th>Work</th><th>Yr</th><th>What they improve</th><th>What is missing — our opening</th></tr></thead><tbody>
+<tr class="hi"><td><a href="https://arxiv.org/abs/2607.25642">Instruction-based Image Editing: A Survey</a><br><span class="vid">2607.25642 · -</span></td><td class="m">2026</td><td>Comprehensive taxonomy of the field</td><td>Confirms localization is treated as a sub-component, not a first-class output</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2508.00265">Multimodal Referring Segmentation: A Survey</a><br><span class="vid">2508.00265 · -</span></td><td class="m">2025</td><td>Taxonomy of referring segmentation</td><td>Establishes the referring-vs-edit-region distinction we rely on</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2505.05074">Visual Affordance Prediction: Survey and Reproducibility</a><br><span class="vid">2505.05074 · -</span></td><td class="m">2025</td><td>Affordance as prediction target</td><td>Affordance studied for robotics/interaction, not for image-edit localization</td></tr></tbody></table></div>
+
+<h2><span class="n">12</span>The four gaps</h2>
+<p class="first">The clusters above converge on four specific openings. We state each with the evidence from the literature and with what we measured ourselves, because a gap asserted from reading alone is a weaker claim than one that has been reproduced.</p>
+
+<h3><span class="n">12.1</span>Editing is solved given a region; producing one is not</h3>
+<p>Clusters on editors, efficiency and flow-matching all perform well when told where to edit. NEP takes the mask as an input; MaskFlow builds the mask into its objective; LazyDiffusion requires a user-drawn one. We tested the obvious substitute and it failed cleanly: selecting a FastSAM mask by CLIP similarity scores <strong>0 of 7</strong> across modify, remove and insert, failing on granularity (returning the whole person for "the jacket"), on spatial language, and on insertion in principle.</p>
+
+<h3><span class="n">12.2</span>The edit region is often not an object</h3>
+<p>Our base paper states this against itself: <em>"geometry-changing edits with no localized source region ('put a hat on the dog' where the dog has no hat)."</em> WhereEdit says it too — it does not handle adding into empty regions. Referring segmentation cannot help, because it returns what the phrase denotes. Measured: CLIPSeg reaches <span class="m">0.1849</span> overall but <span class="m">0.054</span> on insertion.</p>
+
+<h3><span class="n">12.3</span>Supervision, not architecture, is the binding constraint</h3>
+<p>AdaptEdit supervises its MaskPredictor with MagicBrush human annotation and rendered text boxes — explicitly not pixel differences. We measured what that costs. Across all 528 MagicBrush dev turns the human masks cover <strong>62.4%</strong> of the frame against a true changed area of <strong>10.3%</strong>: 9.1× too large, precision 15.8%, and worst on insertions at 11.9×. They are region-of-interest scribbles, and they are the supervision the field is training on.</p>
+
+<h3><span class="n">12.4</span>Nothing scores a predicted edit region</h3>
+<p>LocateEdit-Bench scores edits that already occurred. GEdit-Bench and the region/semantic metric score the output image. The affordance benchmark measures plausibility, not predicted-region IoU. There is no leaderboard on which a missing mask IoU would have been noticed — which is precisely how a 2026 paper built around a MaskPredictor reports none.</p>
+
+<h2><span class="n">13</span>How we fill them, and what it cost</h2>
+<p class="first">Each gap has a corresponding move in our system. One of the four did not survive contact with its own control, and we report that here rather than in a footnote.</p>
+<div class="tw"><table>
+<caption><span class="cn">Table 2.</span> Gap, response, and measured outcome.</caption>
+<thead><tr><th>Gap</th><th>Our response</th><th>Outcome</th></tr></thead>
+<tbody>
+<tr><td>Producing a region</td><td>Predict prototype <em>coefficients</em> from the instruction rather than selecting a detection, so the mask is synthesised</td><td class="m">0.2065 IoU, 12 seeds</td></tr>
+<tr><td>Region is not an object</td><td>A 20×20 spatial coefficient field, so different locations use different prototype mixtures</td><td class="m">insert 0.1186 vs 0.054</td></tr>
+<tr><td>Supervision</td><td>Derive the target by CIE76 ΔE in L*a*b* from real source/target pairs — where a hat <em>landed</em> supervises where a hat <em>should go</em></td><td class="m">beats human masks by 0.0554</td></tr>
+<tr><td>Nothing scores it</td><td>Report mask IoU, precision, recall and F1 on a held-out split, then test downstream</td><td class="m">localization worth 3.3×</td></tr>
+<tr><td>Empty space, explicitly</td><td>Append hand-designed free-space basis functions to the prototype set</td><td class="m">rejected — p = 0.33</td></tr>
+</tbody>
+<tfoot><tr><td colspan="3">The last row was our fourth planned mitigation. Any added basis must beat a random basis of equal dimensionality; ours beat neither the random control (+0.0035, p = 0.33) nor the plain spatial head (−0.0030, p = 0.47), so it was dropped. The gap it targeted remains open.</td></tr></tfoot>
+</table></div>
+
+<h2><span class="n">14</span>Improvement over what is actually comparable</h2>
+<p class="first">Most works in this survey cannot be compared to ours numerically: they optimise image-quality scores on benchmarks that never expose a region, or they are training-free methods on a different task. Claiming a percentage against them would be meaningless. Four reference points <em>are</em> directly comparable, because we ran them on the same 503 held-out turns with the same ground truth.</p>
+<div class="tw"><table>
+<caption><span class="cn">Table 3.</span> Measured against every comparable reference. Ours is the v2 spatial head at 8,306 training samples, 12 seeds.</caption>
+<thead><tr><th>Reference</th><th>Their IoU</th><th>Ours</th><th>Relative</th><th>Insertion, theirs → ours</th></tr></thead>
+<tbody>
+<tr class="hi"><td>CLIPSeg, 150.7 M</td><td class="m">0.1849</td><td class="m">0.2065</td><td class="m">+11.7%</td><td class="m">0.054 → 0.1186  (+120%)</td></tr>
+<tr><td>MagicBrush human masks</td><td class="m">0.1511</td><td class="m">0.2065</td><td class="m">+36.7%</td><td class="m">0.120 → 0.1186  (−1%)</td></tr>
+<tr><td>Whole frame (trivial)</td><td class="m">0.0958</td><td class="m">0.2065</td><td class="m">+115.6%</td><td class="m">0.071 → 0.1186  (+67%)</td></tr>
+<tr><td>Random centred box</td><td class="m">0.0621</td><td class="m">0.2065</td><td class="m">+232.5%</td><td class="m">0.033 → 0.1186  (+259%)</td></tr>
+</tbody>
+<tfoot><tr><td colspan="5">All differences significant at p &lt; 0.003 or better; against CLIPSeg, p = 5.2 × 10⁻⁷. On insertion we are level with human annotation and clearly ahead of everything else. Cost: 4.7 M trainable parameters against CLIPSeg's 150.7 M (32× fewer) at 5.30 ms against 54.3 ms per instruction (10.3× faster), resolution-matched at 352 px.</td></tr></tfoot>
+</table></div>
+<div class="remark flag">
+  <span class="rl">The one comparison we cannot make</span>
+  <p>AdaptEdit is our base paper and the only work with our exact formulation, yet no number in this table is theirs. It reports no mask IoU, and at 20.43 B frozen plus roughly 5.0 B trainable parameters we cannot run it to obtain one. That is not an evasion — it <em>is</em> the gap. We reimplement its mechanism at a scale we can run honestly and supply the measurement it omits.</p>
+</div>
+
+<h2><span class="n">15</span>Base paper in detail</h2>
+<div class="tw"><table>
+<caption><span class="cn">Table 4.</span> AdaptEdit — <em>Edit Where You Mean: Region-Aware Adapter Injection for Mask-Free Local Image Editing</em>. Cai et al., <a href="https://arxiv.org/abs/2604.23763">arXiv:2604.23763</a>, 26 April 2026.</caption>
+<thead><tr><th>Aspect</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td>Problem</td><td>Local image editing without requiring the user to draw a mask</td></tr>
+<tr><td>Method</td><td>Retrofits a frozen diffusion transformer with Block Adapters at each block, a Condition Encoder, and a SpatialGate</td></tr>
+<tr><td>Component we extend</td><td>A thin MaskPredictor head, trained jointly, grounding the edit region from instruction and source image</td></tr>
+<tr><td>Its supervision</td><td>MagicBrush human-annotated masks, plus rendered text bounding regions — explicitly not pixel differences</td></tr>
+<tr><td>Loss</td><td>Region-aware loss weighting pixels inside the predicted region</td></tr>
+<tr><td>Scale</td><td>20.43 B frozen DiT, 4.67 B adapters, 351 M condition encoder</td></tr>
+<tr class="hi"><td>Stated limitation</td><td>"Geometry-changing edits with no localized source region ('put a hat on the dog' where the dog has no hat)"</td></tr>
+<tr><td>Why we cannot extend it directly</td><td>DiT at 12–20 B scale cannot be run or retrained on a 26 GB laptop</td></tr>
+<tr><td>Our relationship to it</td><td>Same problem statement; different supervision (ΔE pairs vs human annotation), different weight class (4.7 M vs DiT-scale), and we report the mask IoU it does not</td></tr>
+</tbody></table></div>
+
+<h2><span class="n">16</span>What the survey implies for novelty</h2>
+<p class="first">Reading 45 recent works leaves three defensible positions and one that is not available to us.</p>
+<p><strong>Available.</strong> Predicting the edit region from the instruction is nearly vacant — two works, one domain-locked. Deriving supervision from pixel differences rather than human annotation is, as far as this survey found, unattempted in this setting, and we measured that it beats the human annotation the field trains on. Reporting a mask IoU at all is novel by absence.</p>
+<p><strong>Not available.</strong> Claiming novelty for the <em>mechanism</em>. FiLM modulation and a BCE + Dice objective are AdaptEdit's design choices as well as ours; we reached them independently but that is not a claim. Likewise, a lightweight text-conditioned segmenter is precedented by VespaSeg. The contribution is the supervision, the measurement, and the bound — not the layer stack.</p>
+<div class="remark">
+  <span class="rl">The honest limit on the novelty argument</span>
+  <p>Thirty-nine of these 45 works appeared in 2025 or 2026. The area is moving fast enough that a gap identified in September may be filled by December, and two of the works here (RegionE, SpotEdit) already push into region-aware efficiency from the direction we would have gone. A novelty claim should rest on the measured bound — insertion is capped at <span class="m">0.212</span> by an object-trained prototype basis — because that is a property of the representation and will outlast any particular paper.</p>
+</div>
+
+<h2><span class="n">17</span>References</h2>
+<p class="first">All 45 works, most recent first. Archived PDFs accompany the matrix at <code>LITERATURE/pdfs/</code>.</p>
+<ol class='refs'><li><a href="https://arxiv.org/abs/2604.23763">*** AdaptEdit / Edit Where You Mean *** [BASE PAPER]</a>. <span class="vid">arXiv 2026 · 2604.23763</span></li><li><a href="https://arxiv.org/abs/2604.18562">AnchorSeg: Language Grounded Query Banks</a>. <span class="vid">arXiv 2026 · 2604.18562</span></li><li><a href="https://arxiv.org/abs/2607.04779">DGSeg: Dynamic Gating of Semantic-Spatial Predictions</a>. <span class="vid">arXiv 2026 · 2607.04779</span></li><li><a href="https://arxiv.org/abs/2605.10859">EditMGT: Masked Generative Transformer Is What You Need</a>. <span class="vid">arXiv 2026 · 2605.10859</span></li><li><a href="https://arxiv.org/abs/2606.09273">EditSSC: Editable Semantic Occupancy</a>. <span class="vid">arXiv 2026 · 2606.09273</span></li><li>Follow-Your-Shape: Trajectory-Guided Region Control. <span class="vid">ICLR 2026 2026</span></li><li><a href="https://arxiv.org/abs/2603.21176">GIDE: Unlocking Diffusion LLMs for Precise Training-Free Editing</a>. <span class="vid">arXiv 2026 · 2603.21176</span></li><li><a href="https://arxiv.org/abs/2601.03741">I2E: From Image Pixels to Interactive Environments</a>. <span class="vid">arXiv 2026 · 2601.03741</span></li><li><a href="https://arxiv.org/abs/2607.25642">Instruction-based Image Editing: A Survey</a>. <span class="vid">arXiv 2026 · 2607.25642</span></li><li><a href="https://arxiv.org/abs/2602.05577">LocateEdit-Bench: Benchmark for Editing Localization</a>. <span class="vid">arXiv 2026 · 2602.05577</span></li><li><a href="https://arxiv.org/abs/2606.14168">MUSE: Agentic 3D Scene Authoring via Memory</a>. <span class="vid">arXiv 2026 · 2606.14168</span></li><li><a href="https://arxiv.org/abs/2608.06929">MaskFlow: Precise, Consistent and Seamless Regional Editing</a>. <span class="vid">arXiv 2026 · 2608.06929</span></li><li>Qwen-Image-Edit (2509 / 2511 / 2.0). <span class="vid">Alibaba release 2026</span></li><li>RePlan: Reasoning-Guided Region Planning. <span class="vid">ECCV 2026 2026</span></li><li><a href="https://arxiv.org/abs/2510.25590">RegionE: Adaptive Region-Aware Generation</a>. <span class="vid">ICLR 2026 2026 · 2510.25590</span></li><li><a href="https://arxiv.org/abs/2604.20258">Rethinking Where to Edit: Task-Aware Localization</a>. <span class="vid">arXiv 2026 · 2604.20258</span></li><li><a href="https://arxiv.org/abs/2605.20110">SetCon: Open-Ended Referring Segmentation</a>. <span class="vid">arXiv 2026 · 2605.20110</span></li><li><a href="https://arxiv.org/abs/2608.01077">VespaSeg: Resource-Aware Ground-then-Segment RES</a>. <span class="vid">arXiv 2026 · 2608.01077</span></li><li><a href="https://arxiv.org/abs/2607.20883">WhereEdit: Mask-aware Local Latent Editing for One-Step Editing</a>. <span class="vid">arXiv 2026 · 2607.20883</span></li><li><a href="https://arxiv.org/abs/2506.13827">Balancing Preservation and Modification: Region+Semantic Metric</a>. <span class="vid">arXiv 2025 · 2506.13827</span></li><li><a href="https://arxiv.org/abs/2508.06937">CannyEdit: Selective Canny Control and Dual-Prompt Guidance</a>. <span class="vid">arXiv 2025 · 2508.06937</span></li><li><a href="https://arxiv.org/abs/2506.21546">Counterfactual Segmentation Reasoning</a>. <span class="vid">arXiv 2025 · 2506.21546</span></li><li>FLUX.1 Kontext [dev] / FLUX.2. <span class="vid">Black Forest Labs 2025</span></li><li><a href="https://arxiv.org/abs/2511.13713">Free-Form Scene Editor: Multi-Round Object Manipulation</a>. <span class="vid">arXiv 2025 · 2511.13713</span></li><li><a href="https://arxiv.org/abs/2504.17761">GEdit-Bench (via Step1X-Edit)</a>. <span class="vid">benchmark 2025 · 2504.17761</span></li><li><a href="https://arxiv.org/abs/2506.04158">Image Editing As Programs</a>. <span class="vid">arXiv 2025 · 2506.04158</span></li><li><a href="https://arxiv.org/abs/2505.01079">Layer-wise Memory for Sequential Editing</a>. <span class="vid">arXiv 2025 · 2505.01079</span></li><li><a href="https://arxiv.org/abs/2508.00265">Multimodal Referring Segmentation: A Survey</a>. <span class="vid">arXiv 2025 · 2508.00265</span></li><li><a href="https://arxiv.org/abs/2508.06044">NEP: Autoregressive Image Editing via Next Editing Token Prediction</a>. <span class="vid">arXiv 2025 · 2508.06044</span></li><li><a href="https://arxiv.org/abs/2512.24023">RSAgent: Reason and Act for Text-Guided Segmentation</a>. <span class="vid">arXiv 2025 · 2512.24023</span></li><li><a href="https://arxiv.org/abs/2510.16772">Region in Context: Text-Conditioned Editing with Semantic Reasoning</a>. <span class="vid">arXiv 2025 · 2510.16772</span></li><li><a href="https://arxiv.org/abs/2512.22323">SpotEdit: Selective Region Editing in Diffusion Transformers</a>. <span class="vid">arXiv 2025 · 2512.22323</span></li><li><a href="https://arxiv.org/abs/2504.17761">Step1X-Edit: A Practical Framework for General Image Editing</a>. <span class="vid">arXiv 2025 · 2504.17761</span></li><li><a href="https://arxiv.org/abs/2507.23300">Training-free Geometric Image Editing</a>. <span class="vid">arXiv 2025 · 2507.23300</span></li><li>US12462449B2 - Mask conditioned image transformation (patent, Adobe). <span class="vid">USPTO patent 2025</span></li><li>US12561956 - Affordance-based reposing of an object (patent). <span class="vid">USPTO patent 2025</span></li><li><a href="https://arxiv.org/abs/2505.05074">Visual Affordance Prediction: Survey and Reproducibility</a>. <span class="vid">arXiv 2025 · 2505.05074</span></li><li><a href="https://arxiv.org/abs/2508.15772">Visual Autoregressive Modeling for Instruction-Guided Editing</a>. <span class="vid">arXiv 2025 · 2508.15772</span></li><li><a href="https://arxiv.org/abs/2507.05259">X-Planner: Complex Instruction-Based Editing</a>. <span class="vid">arXiv 2025 · 2507.05259</span></li><li><a href="https://arxiv.org/abs/2411.07232">Add-it: Training-Free Object Insertion</a>. <span class="vid">ICLR / arXiv 2024 · 2411.07232</span></li><li><a href="https://arxiv.org/abs/2411.07232">Adding Affordance Benchmark (via Add-it)</a>. <span class="vid">benchmark 2024 · 2411.07232</span></li><li><a href="https://arxiv.org/abs/2404.12382">LazyDiffusion: Lazy Diffusion Transformer</a>. <span class="vid">ECCV 2024 2024 · 2404.12382</span></li><li><a href="https://arxiv.org/abs/2412.14462">MADD: Affordance-Aware Object Insertion (Dual Diffusion)</a>. <span class="vid">arXiv 2024 · 2412.14462</span></li><li><a href="https://arxiv.org/abs/2412.20062">MADiff: Text-Guided Fashion Editing with Mask Prediction</a>. <span class="vid">arXiv 2024 · 2412.20062</span></li><li><a href="https://arxiv.org/abs/2410.18923">SegLLM: Multi-round Reasoning Segmentation</a>. <span class="vid">arXiv 2024 · 2410.18923</span></li></ol>
+
+<footer>Amritha S · Yugeshwaran P · Guide Dr. Saranya M · VIT Chennai · Foundations of Data Science, Review 1</footer>
+</div>

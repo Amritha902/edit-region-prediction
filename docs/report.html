@@ -1,0 +1,530 @@
+<title>Edit-Region Prediction</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{
+  --paper:#fdfdfc; --ink:#1b1a17; --ink-2:#4a4842; --ink-3:#797770;
+  --rule:#1b1a17; --hair:#c9c6bd; --link:#3a5f8a; --flag:#8a4a2c;
+  --serif:"Crimson Pro",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#16161a; --ink:#e6e4de; --ink-2:#b3b0a8; --ink-3:#8a8780;
+    --rule:#e6e4de; --hair:#3a3a3f; --link:#8fb4dd; --flag:#d08f6a;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16161a; --ink:#e6e4de; --ink-2:#b3b0a8; --ink-3:#8a8780;
+  --rule:#e6e4de; --hair:#3a3a3f; --link:#8fb4dd; --flag:#d08f6a;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:19px;line-height:1.54;margin:0;padding:0 22px 90px;
+  font-variant-numeric:oldstyle-nums proportional-nums;}
+.wrap{max-width:40em;margin:0 auto}
+/* title */
+.titleblock{padding:74px 0 0;text-align:center}
+.titleblock .kind{font-size:14px;letter-spacing:.06em;color:var(--ink-3);
+  font-variant:small-caps;margin:0 0 20px}
+h1{font-weight:600;font-size:31px;line-height:1.22;letter-spacing:-.006em;
+  margin:0 auto 10px;max-width:22em;text-wrap:balance}
+.titleblock .sub{font-size:19px;color:var(--ink-2);font-style:italic;
+  margin:0 auto 26px;max-width:30em;text-wrap:balance}
+.authors{font-size:17px;margin:0 0 4px}
+.affil{font-size:15px;color:var(--ink-2);margin:4px 0 0;font-style:italic}
+.dateline{font-size:14px;color:var(--ink-3);margin:14px 0 0;font-variant:small-caps;letter-spacing:.04em}
+hr.rule{border:0;border-top:1px solid var(--rule);margin:34px 0 0}
+/* abstract: indented block, no box */
+.abs{margin:30px auto 0;max-width:34em;font-size:17.5px;line-height:1.5;color:var(--ink-2)}
+.abs .lbl{font-variant:small-caps;letter-spacing:.05em;color:var(--ink);font-size:15px}
+.abs p{margin:8px 0}
+/* sections */
+h2{font-weight:600;font-size:20px;margin:44px 0 2px;line-height:1.3;text-wrap:balance}
+h2 .n{color:var(--ink-3);font-weight:400;margin-right:.5em;font-variant-numeric:lining-nums}
+h3{font-weight:600;font-size:17.5px;margin:26px 0 2px;font-style:italic}
+h3 .n{color:var(--ink-3);font-weight:400;font-style:normal;margin-right:.45em;font-variant-numeric:lining-nums}
+p{margin:10px 0;text-align:justify;hyphens:auto}
+p.first{text-indent:0}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid var(--hair)}
+a:hover{border-bottom-color:var(--link)}
+ul,ol{margin:10px 0;padding-left:1.4em}
+li{margin:5px 0}
+code{font-family:var(--mono);font-size:.82em}
+.m{font-family:var(--mono);font-size:.82em;font-variant-numeric:lining-nums tabular-nums}
+/* remark: indented smaller type, no rail, no box */
+.remark{margin:18px 0 18px 1.6em;padding-left:1.1em;border-left:1px solid var(--hair);
+  font-size:17px;color:var(--ink-2)}
+.remark .rl{font-variant:small-caps;letter-spacing:.05em;color:var(--ink);font-size:14.5px;
+  display:block;margin-bottom:3px}
+.remark.flag .rl{color:var(--flag)}
+.remark p{margin:6px 0}
+/* booktabs tables */
+.tw{overflow-x:auto;margin:22px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;
+  font-variant-numeric:lining-nums tabular-nums;font-family:var(--serif)}
+caption{caption-side:top;text-align:left;font-size:15px;color:var(--ink-2);
+  padding:0 0 8px;line-height:1.4}
+caption .cn{font-variant:small-caps;letter-spacing:.05em;color:var(--ink)}
+thead th{font-weight:600;text-align:right;padding:5px 11px;
+  border-top:1.3px solid var(--rule);border-bottom:.6px solid var(--rule);
+  font-variant:small-caps;letter-spacing:.03em;font-size:14px}
+thead th:first-child{text-align:left}
+tbody td{padding:5px 11px;text-align:right;vertical-align:top}
+tbody td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:1.3px solid var(--rule)}
+tr.hi td{font-weight:600}
+tfoot td{border:0;padding:9px 11px 0;font-size:14px;color:var(--ink-3);
+  text-align:left;line-height:1.45}
+table.lit{font-size:14px}
+table.lit td{padding:7px 9px;text-align:left;line-height:1.4}
+table.lit thead th{text-align:left;padding:5px 9px}
+.vid{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
+  font-variant-numeric:lining-nums}
+/* figures */
+figure{margin:26px 0}
+figure img{width:100%;height:auto;display:block}
+figcaption{font-size:15px;line-height:1.45;color:var(--ink-2);margin-top:8px}
+figcaption .cn{font-variant:small-caps;letter-spacing:.05em;color:var(--ink)}
+/* year histogram, drawn not carded */
+.hist{display:flex;align-items:flex-end;gap:20px;height:132px;margin:24px 0 6px;
+  padding-bottom:0;border-bottom:1px solid var(--rule)}
+.yr{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.ybar{width:60%;background:var(--ink);min-height:2px}
+.yn{font-size:13px;color:var(--ink-2);order:-1;margin-bottom:4px;
+  font-variant-numeric:lining-nums}
+.yl{font-size:13.5px;color:var(--ink-3);margin-top:6px;font-variant-numeric:lining-nums}
+.histlab{font-size:14px;color:var(--ink-3);margin:22px 0 0;font-style:italic}
+ol.refs{font-size:15px;line-height:1.45;padding-left:1.8em}
+ol.refs li{margin:7px 0}
+footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--hair);
+  font-size:14px;color:var(--ink-3);text-align:center;font-style:italic}
+@media (max-width:680px){
+  body{font-size:17.5px;padding:0 16px 60px}
+  h1{font-size:25px}.titleblock{padding-top:46px}
+  p{text-align:left;hyphens:none}
+  .remark{margin-left:0}
+}
+@media print{body{font-size:10.5pt;padding:0}figure,table,.remark{page-break-inside:avoid}}
+/* report-specific */
+.eq{font-family:var(--mono);font-size:14.5px;line-height:1.9;margin:18px 0 18px 1.6em;
+  color:var(--ink);font-variant-numeric:lining-nums;overflow-x:auto}
+pre{font-family:var(--mono);font-size:13px;line-height:1.62;margin:18px 0;
+  padding:12px 0;border-top:.6px solid var(--hair);border-bottom:.6px solid var(--hair);
+  overflow-x:auto;color:var(--ink-2);font-variant-numeric:lining-nums}
+.lede{font-size:19.5px;color:var(--ink);font-style:italic;text-align:left}
+</style>
+
+<div class="wrap">
+<div class="titleblock">
+  <p class="kind">Technical Report · Foundations of Data Science · Review 1</p>
+  <h1>Disentangling Localization from Editing in Instruction-Guided Image Manipulation</h1>
+  <p class="sub">A frozen-backbone edit-region predictor, measured against its own representational ceiling</p>
+  <p class="authors">Amritha S <span class="m">23BEC1368</span> &nbsp;·&nbsp; Yugeshwaran P <span class="m">23BEC1404</span></p>
+  <p class="affil">Guide: Dr. Saranya M (54783) · School of Electronics Engineering, VIT Chennai</p>
+  <p class="dateline">13 September 2026</p>
+</div>
+<hr class="rule">
+
+<div class="abs">
+  <span class="lbl">Abstract</span>
+  <p>Instruction-guided image editors apply a diffusion model to the whole frame and rely on the model to decide, implicitly, which pixels should change. Our base paper, <b>AdaptEdit</b>, makes that decision explicit with a learned MaskPredictor, and then names the failure it cannot solve in its own limitations section: edits that add an object where no source region exists. AdaptEdit never reports a mask IoU, and at 20.43 B frozen plus 5.0 B trainable parameters it cannot be reproduced on available hardware.</p>
+  <p>We therefore reimplement its <i>mechanism</i> at laptop scale and supply the measurement it omits. A 4.7 M head predicts a spatial field of coefficients over 32 frozen FastSAM prototypes, conditioned on a CLIP text embedding. Trained on 8,306 MagicBrush turns on a single Apple M5, it reaches <b>IoU 0.2065 ± 0.0072</b> across 12 seeds on 503 held-out turns — ahead of CLIPSeg (0.1849, 150.7 M parameters) and of MagicBrush's own human annotations (0.1511), at 32× fewer trainable parameters and 10.3× lower per-instruction latency.</p>
+  <p>The contribution we regard as most useful is negative and quantitative. Fitting coefficients directly to ground truth by least squares bounds what <i>any</i> predictor can achieve with this basis: <b>0.212 for insertion</b> against 0.433 for removal. Insertion — the case the project exists to address — has the lowest ceiling, because prototypes trained to segment objects span empty space poorly. We reach 56% of that ceiling. The remaining gap is representational, not statistical, and no amount of data closes it.</p>
+</div>
+
+<section id="s1">
+  <h2><span class="n">1</span> The problem</h2>
+  <p class="lede">An instruction like <i>“put a hat on the dog”</i> names an object that is not in the image. There is no source region to point at, and every localization method that works by referring to what is visible fails on exactly this case.</p>
+  <p>Instruction-guided editors such as InstructPix2Pix take a source image and a sentence and return an edited image. Internally they denoise the entire frame; nothing constrains the change to the region the instruction is about. In practice this produces two distinct failures: the intended edit is applied weakly or not at all, and unrelated parts of the image drift — colour shifts, texture changes, small objects rearranged.</p>
+  <p>The obvious fix is to predict <i>where</i> the edit should happen and gate the editor to that region. This splits the task into two stages:</p>
+  <ul>
+    <li><b>Stage 1 — localization.</b> Given image and instruction, predict a mask of the pixels that should change.</li>
+    <li><b>Stage 2 — editing.</b> Apply an editor and composite the result back through that mask.</li>
+  </ul>
+  <p>Stage 1 is the subject of this report; Stage 2 is measured in §9 to verify that Stage 1 is worth doing at all.</p>
+</section>
+
+<section id="s2">
+  <h2><span class="n">2</span> Base paper and the stated gap</h2>
+  <p>Our base paper is <b>AdaptEdit</b> (arXiv:2604.23763, April 2026). It adapts a frozen Qwen-Image-Edit diffusion transformer (20.43 B parameters) with Block Adapters (4.67 B), a Condition Encoder (351 M), a SpatialGate, and a region-aware loss weighted <code>w = 1 + 2M̄</code> inside the predicted region. Localization is handled by a small <b>MaskPredictor</b> (7.8 M): a FiLM-modulated query-grid decoder trained with BCE + Dice.</p>
+  <p>The gap we address is the one AdaptEdit states about itself:</p>
+  <div class="remark">
+    <span class="rl">From AdaptEdit's limitations</span>
+    <p><i>“Geometry-changing edits with no localized source region (‘put a hat on the dog’ where the dog has no hat)…”</i></p>
+  </div>
+  <p>Two properties of that paper shape everything we did. First, it is not reproducible on our hardware: 20.43 B frozen plus roughly 5.0 B trainable parameters is several orders of magnitude beyond a 26 GB laptop. Second, and more usefully, <b>it never reports a mask IoU</b> — the MaskPredictor is evaluated only through downstream image quality. The quality of the localization itself is unmeasured.</p>
+  <p>That second point defines our contribution. Rather than attempt a reproduction that would be a fiction, we reimplement the <i>mechanism</i> — text-conditioned mask prediction over frozen features — at a scale we can run honestly, and we measure the thing the base paper leaves unmeasured, including against its acknowledged failure case.</p>
+</section>
+
+<section id="s3">
+  <h2><span class="n">3</span> Method</h2>
+
+  <h3><span class="n">3.1</span>Frozen feature extraction</h3>
+  <p>We take a YOLOv8x-seg / FastSAM backbone and freeze it. YOLACT-style instance segmentation produces two things we reuse directly: <b>32 mask prototypes</b> at stride 4 (160 × 160 for a 640 × 640 input), and a 640-d image context vector from the SPPF layer. Prototypes are spatial basis functions; a segmentation mask is a linear combination of them passed through a sigmoid. Text is encoded by a frozen CLIP encoder to a 512-d embedding.</p>
+  <p>Nothing in either backbone is trained. Only the head that maps <span class="m">(text, context, prototypes) → mask</span> is learned, which is what makes the whole experiment feasible on one laptop and what produces the parameter and latency advantages in §8.</p>
+
+  <h3><span class="n">3.2</span>v1 — a global coefficient vector</h3>
+  <p>The first head predicts a single 32-vector of coefficients per image–instruction pair, plus a bias. Text modulates the image context by FiLM, and an MLP emits the coefficients:</p>
+  <div class="eq">v = γ(t) · v<sub>img</sub> + β(t)<br>c, b = MLP(v)<br>logits = Σ<sub>i</sub> c<sub>i</sub> · proto<sub>i</sub> + b</div>
+  <p>1,399,073 trainable parameters. The mask is one linear combination of prototypes applied uniformly across the frame.</p>
+
+  <h3><span class="n">3.3</span>v2 — a spatial coefficient field</h3>
+  <p>The limitation of v1 is structural rather than one of capacity: a single coefficient vector means every location uses the same prototype mixture. A previous experiment (exp11) found v1 saturating at 1.4 M parameters, so width was never the constraint. v2 predicts a <b>20 × 20 field</b> of coefficients, upsampled bilinearly to prototype resolution, retaining a global branch so the instruction can still set an overall prior:</p>
+  <div class="eq">c(x,y) = c<sub>global</sub> + Upsample(ConvNet(field(v)))(x,y)<br>logits(x,y) = Σ<sub>i</sub> c<sub>i</sub>(x,y) · proto<sub>i</sub>(x,y) + b</div>
+  <p>4,693,633 trainable parameters. Different regions can now draw on different prototype mixtures. The hypothesis this tests is specific: a spatially varying combination should help most where the target region is <i>not</i> the extent of a single object — which is precisely the insertion case.</p>
+
+  <h3><span class="n">3.4</span>Loss and supervision targets</h3>
+  <p>Training minimises <b>BCE + 2 × Dice</b>, with gradient-norm clipping at 1.0.</p>
+  <p>Targets are <b>not</b> MagicBrush's own masks. Measured across all 528 dev turns, those masks cover 62.4% of the frame against a real changed area of 10.3% — <b>9.1× too large</b>, precision 15.8%, IoU 0.16 against the actual change, and worst for insertions at 11.9×. They are region-of-interest scribbles, not edit masks.</p>
+  <p>Instead we derive the target from the human-made source/target image pair by <b>CIE76 ΔE in L*a*b*</b>, thresholded and cleaned by connected components. This is the same measurement that exposed the coarseness, turned into supervision. Samples whose changed area falls outside 0.4%–45% are rejected as degenerate — too small to learn from, or a whole-frame restyle.</p>
+  <div class="remark flag">
+    <span class="rl">Polarity, recorded because it cost a full run</span>
+    <p>MagicBrush masks are <b>bright = preserve</b>, not bright = edit. Assuming the opposite produced recall 0.3% and IoU 0.001 before it was caught. We use their masks only as a sanity filter, never as a target.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <h2><span class="n">4</span> Data</h2>
+  <p>MagicBrush, all 51 training shards and all 4 dev shards, 25 GB of parquet. Each row is a source image, a target image, an instruction, and a turn index; the dataset is multi-turn, so one photograph yields several successive edits.</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 1.</span> Dataset after ΔE derivation and degeneracy filtering.</caption>
+    <thead><tr><th>Split</th><th>Shards</th><th>Rows</th><th>Usable</th><th>Insert</th><th>Modify</th><th>Remove</th></tr></thead>
+    <tbody>
+      <tr><td>train</td><td>51</td><td>8,807</td><td>8,306</td><td>1,828</td><td>6,045</td><td>433</td></tr>
+      <tr><td>dev (held out)</td><td>4</td><td>528</td><td>503</td><td>—</td><td>—</td><td>—</td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="7">501 train rows rejected as degenerate. Edit kind is assigned from the instruction's leading verb: <code>put/add</code> → insert, <code>remove/delete</code> → remove, otherwise modify.</td></tr></tfoot>
+  </table>
+  </div>
+
+  <h3><span class="n">4.1</span>Leakage audit</h3>
+  <p>Because MagicBrush is multi-turn, a split partitioned by <i>turn</i> rather than by <i>image</i> would place the same photograph in both train and dev, and scaling the training set 3.65× would amplify any such contamination. We therefore hashed the raw encoded bytes of every source and target image on both sides before trusting any result:</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 2.</span> Image-level disjointness, SHA-1 over encoded bytes, all 55 shards.</caption>
+    <thead><tr><th>Quantity</th><th>Count</th></tr></thead>
+    <tbody>
+      <tr><td>Distinct dev images</td><td>794</td></tr>
+      <tr><td>Distinct train images</td><td>13,317</td></tr>
+      <tr class="hi"><td>Images appearing in both</td><td>0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The splits share no image. This check was run <i>before</i> the results below were believed, not afterwards to defend them.</p>
+</section>
+
+<section id="s5">
+  <h2><span class="n">5</span> Experimental protocol</h2>
+  <p>Every number in §6–§8 follows one protocol, held fixed so that the training-set size is the only variable that changes between the two scales:</p>
+  <ul>
+    <li><b>Checkpoint selection on a held-out 15% slice of train.</b> Never on dev.</li>
+    <li><b>Dev touched exactly once per seed</b>, at full image resolution against the undilated ΔE mask.</li>
+    <li><b>12 seeds</b> (1368, 1–11). Each seeds <code>torch</code>, <code>numpy</code>, <code>random</code> and the MPS generator.</li>
+    <li>60 epochs, batch 32, AdamW, lr 1 × 10⁻³, weight decay 0.01, cosine schedule.</li>
+    <li>Significance by Welch's <i>t</i>-test on seed means; one-sample <i>t</i>-tests against fixed baselines.</li>
+  </ul>
+  <p>Frozen features are precomputed once into memory-mapped arrays (13.8 GB for the full split), so an epoch touches only the head. This is what makes 24 seeded runs feasible.</p>
+
+
+  <h3><span class="n">5.1</span>Complete configuration</h3>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 3.</span> Every value needed to reproduce the result, taken from the source rather than from notes.</caption>
+    <thead><tr><th>Group</th><th>Parameter</th><th>Value</th><th>Why this value</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="5">Supervision</td><td>ΔE metric</td><td class="m">CIE76 in L*a*b*</td><td>perceptual, not raw RGB distance</td></tr>
+      <tr><td>ΔE threshold</td><td class="m">12.0</td><td>chosen from a noise-robustness sweep; holds at σ=8</td></tr>
+      <tr><td>Morphological kernel</td><td class="m">5 × 5</td><td>open then close, to solidify speckled regions</td></tr>
+      <tr><td>Min component area</td><td class="m">40 px</td><td>ΔE is noisier per-pixel than grayscale differencing</td></tr>
+      <tr><td>Sample filter</td><td class="m">0.4% – 45%</td><td>reject unlearnably small edits and whole-frame restyles</td></tr>
+      <tr><td rowspan="4">Representation</td><td>Input resolution</td><td class="m">640 × 640</td><td>backbone native</td></tr>
+      <tr><td>Prototypes</td><td class="m">32 at 160 × 160</td><td>YOLACT stride-4 mask basis, frozen</td></tr>
+      <tr><td>Image context</td><td class="m">640-d (SPPF)</td><td>frozen</td></tr>
+      <tr><td>Text embedding</td><td class="m">512-d CLIP</td><td>frozen, L2-normalised</td></tr>
+      <tr><td rowspan="3">Head (v2)</td><td>Coefficient grid</td><td class="m">20 × 20 → bilinear</td><td>spatially varying prototype mixture</td></tr>
+      <tr><td>Hidden width</td><td class="m">512</td><td>v1 saturated at 1.4 M; width was never the constraint</td></tr>
+      <tr><td>Dropout</td><td class="m">0.0</td><td>swept; no benefit at this scale</td></tr>
+      <tr><td rowspan="6">Optimisation</td><td>Optimiser</td><td class="m">AdamW</td><td>—</td></tr>
+      <tr><td>Learning rate</td><td class="m">1 × 10⁻³, cosine to 0</td><td>swept at n = 2,278</td></tr>
+      <tr><td>Weight decay</td><td class="m">0.01</td><td>—</td></tr>
+      <tr><td>Batch size</td><td class="m">32</td><td>—</td></tr>
+      <tr><td>Loss</td><td class="m">BCE + 2 × Dice</td><td>Dice weight swept; 2.0 best</td></tr>
+      <tr><td>Gradient clipping</td><td class="m">norm 1.0</td><td>—</td></tr>
+      <tr><td rowspan="4">Evaluation</td><td>Epochs / selection</td><td class="m">60, best on train-val</td><td>dev never used for selection</td></tr>
+      <tr><td>Decision threshold</td><td class="m">0.5 fixed (§6.2)</td><td>set a priori; sensitivity analysed separately</td></tr>
+      <tr><td>Seeds</td><td class="m">12 (1368, 1–11)</td><td>torch, numpy, random and MPS all seeded</td></tr>
+      <tr><td>Baseline</td><td class="m">CIDAS/clipseg-rd64-refined</td><td>the standard referring segmenter</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="remark flag">
+    <span class="rl">Two protocol errors found and corrected during this project</span>
+    <p><b>Contamination.</b> An overnight script contained <code>cp cache_all.pt cache_train.pt</code>, where <code>cache_all</code> merged dev into train. The model had been trained on the evaluation set. It surfaced when a baseline scored 0.3743 against a training-time 0.1397 — a gap too large to be a metric difference. The 0.1397 headline and the associated “beats human annotation” claim were <b>retracted</b> and recomputed on a clean split.</p>
+    <p><b>Test-set epoch selection.</b> An earlier evaluation chose the best epoch by <i>dev</i> IoU and concluded v2 was worse than v1 (0.1373 vs 0.1533). Selecting on train-val instead <b>reverses</b> the ordering, significantly. Test-set selection can invert a conclusion, not merely inflate it.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <h2><span class="n">6</span> Results</h2>
+
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 4.</span> Main result. Dev IoU over 503 held-out turns, 12 seeds per configuration, clean protocol throughout.</caption>
+    <thead><tr><th>Configuration</th><th>Trainable</th><th>n = 2,278</th><th>n = 8,306</th><th>Δ from data</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>v2 spatial field</td><td class="m">4,693,633</td><td class="m">0.1718 ± 0.0099</td><td class="m">0.2065 ± 0.0072</td><td class="pos m">+0.0347</td></tr>
+      <tr><td>v1 global coefficients</td><td class="m">1,399,073</td><td class="m">0.1590 ± 0.0111</td><td class="m">0.1907 ± 0.0053</td><td class="pos m">+0.0317</td></tr>
+      <tr><td>CLIPSeg <i>(pretrained baseline)</i></td><td class="m">150,747,746</td><td class="m">0.1849</td><td class="m">0.1849</td><td class="m">—</td></tr>
+      <tr><td>MagicBrush human masks</td><td class="m">—</td><td class="m">0.1511</td><td class="m">0.1511</td><td class="m">—</td></tr>
+      <tr><td>Full frame <i>(trivial)</i></td><td class="m">0</td><td class="m">0.0958</td><td class="m">0.0958</td><td class="m">—</td></tr>
+      <tr><td>Random centred box <i>(trivial)</i></td><td class="m">0</td><td class="m">0.0621</td><td class="m">0.0621</td><td class="m">—</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 5.</span> Significance. Welch's <i>t</i>-test on seed means; one-sample against fixed baselines.</caption>
+    <thead><tr><th>Comparison</th><th>Δ IoU</th><th>p</th></tr></thead>
+    <tbody>
+      <tr><td>v2: 8,306 vs 2,278 samples</td><td class="pos m">+0.0347</td><td class="m">4.1 × 10⁻⁹</td></tr>
+      <tr><td>v1: 8,306 vs 2,278 samples</td><td class="pos m">+0.0317</td><td class="m">1.5 × 10⁻⁷</td></tr>
+      <tr class="hi"><td>v2 vs v1 at n = 8,306</td><td class="pos m">+0.0158</td><td class="m">5.4 × 10⁻⁶</td></tr>
+      <tr><td>v2 vs CLIPSeg</td><td class="pos m">+0.0216</td><td class="m">5.2 × 10⁻⁷</td></tr>
+      <tr><td>v1 vs CLIPSeg</td><td class="pos m">+0.0058</td><td class="m">2.9 × 10⁻³</td></tr>
+      <tr><td>v2 vs MagicBrush human masks</td><td class="pos m">+0.0554</td><td class="m">2.5 × 10⁻¹¹</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <figure>
+    <img src="results_full.png" alt="Four panels: per-seed dev IoU for v1 and v2 at both training-set sizes with CLIPSeg and human-mask reference lines; a significance table; per-kind IoU against least-squares ceilings; and percentage of ceiling reached.">
+    <figcaption><span class="cn">Figure 1.</span> Every seed plotted individually. All 12 v2 seeds at n = 8,306 clear CLIPSeg; the separation is not carried by outliers. Lower panels show per-kind performance against the least-squares ceiling of §7.</figcaption>
+  </figure>
+
+
+  <h3><span class="n">6.1</span>The full metric suite</h3>
+  <p>IoU alone hides the precision/recall trade-off: two models with identical IoU can behave quite differently, one timid and one over-eager. All four metrics, computed over the same 503 dev turns at the fixed 0.5 threshold:</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 6.</span> Mean ± sd over 12 seeds, with 95% confidence intervals on the mean (<i>t</i>, 11 df).</caption>
+    <thead><tr><th>Head</th><th>IoU</th><th>Precision</th><th>Recall</th><th>F1 / Dice</th><th>Predicted area</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>v2 spatial</td><td class="m">0.2065 ± 0.0072</td><td class="m">0.3126 ± 0.0084</td><td class="m">0.3878 ± 0.0256</td><td class="m">0.2976</td><td class="m">11.70%</td></tr>
+      <tr><td>v1 global</td><td class="m">0.1907 ± 0.0053</td><td class="m">0.2972 ± 0.0070</td><td class="m">0.3510 ± 0.0209</td><td class="m">0.2757</td><td class="m">—</td></tr>
+      <tr><td><i>95% CI, v2</i></td><td class="m">[0.2019, 0.2111]</td><td class="m">[0.3072, 0.3179]</td><td class="m">[0.3716, 0.4041]</td><td class="m">—</td><td class="m">true: 9.58%</td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="6">Cohen's <i>d</i> for v2 vs v1 on IoU is <b>2.50</b> — a large effect, not merely a significant one. Predicted area 11.70% against a true 9.58% shows the model over-predicts slightly at this threshold.</td></tr></tfoot>
+  </table>
+  </div>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 7.</span> Per edit kind, v2 at threshold 0.5. Precision on insertion is the weak point.</caption>
+    <thead><tr><th>Kind</th><th>IoU</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead>
+    <tbody>
+      <tr><td>modify</td><td class="m">0.2313</td><td class="m">0.3455</td><td class="m">0.4192</td><td class="m">0.3285</td></tr>
+      <tr><td>remove</td><td class="m">0.2007</td><td class="m">0.3168</td><td class="m">0.4263</td><td class="m">0.2996</td></tr>
+      <tr class="hi"><td>insert</td><td class="m">0.1186</td><td class="m">0.1923</td><td class="m">0.2624</td><td class="m">0.1852</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3><span class="n">6.2</span>Threshold sensitivity and honest selection</h3>
+  <p>The 0.5 operating point was fixed before evaluation. Sweeping it on dev shows IoU actually peaks near 0.3:</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 8.</span> Threshold sweep for v2, mean over 12 seeds. True changed area is 9.58%.</caption>
+    <thead><tr><th>Threshold</th><th>IoU</th><th>Precision</th><th>Recall</th><th>F1</th><th>Predicted area</th></tr></thead>
+    <tbody>
+      <tr><td class="m">0.1</td><td class="m">0.2096</td><td class="m">0.2393</td><td class="m">0.6733</td><td class="m">0.3124</td><td class="m">30.12%</td></tr>
+      <tr><td class="m">0.2</td><td class="m">0.2172</td><td class="m">0.2637</td><td class="m">0.5775</td><td class="m">0.3185</td><td class="m">22.74%</td></tr>
+      <tr class="hi"><td class="m">0.3</td><td class="m">0.2180</td><td class="m">0.2818</td><td class="m">0.5063</td><td class="m">0.3166</td><td class="m">18.10%</td></tr>
+      <tr><td class="m">0.4</td><td class="m">0.2144</td><td class="m">0.2975</td><td class="m">0.4453</td><td class="m">0.3097</td><td class="m">14.60%</td></tr>
+      <tr><td class="m">0.5 <i>(reported)</i></td><td class="m">0.2065</td><td class="m">0.3126</td><td class="m">0.3878</td><td class="m">0.2976</td><td class="m">11.70%</td></tr>
+      <tr><td class="m">0.7</td><td class="m">0.1747</td><td class="m">0.3458</td><td class="m">0.2750</td><td class="m">0.2532</td><td class="m">6.90%</td></tr>
+      <tr><td class="m">0.9</td><td class="m">0.1119</td><td class="m">0.3705</td><td class="m">0.1479</td><td class="m">0.1658</td><td class="m">2.74%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Adopting 0.3 <i>because the dev sweep says so</i> would be test-set tuning — the same error that once inverted the v1/v2 ordering in this project (§5). So we selected the threshold <b>per seed on the train-val slice</b>, the same slice that chose the epoch, and applied it to dev once:</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 9.</span> Threshold chosen on train-val, dev touched once. Paired <i>t</i>-test across the same 12 seeds.</caption>
+    <thead><tr><th>Head</th><th>Thresholds chosen</th><th>Fixed 0.5</th><th>Selected</th><th>Gain</th><th>p (paired)</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>v2 spatial</td><td class="m">0.3 ×7, 0.2 ×5</td><td class="m">0.2065 ± 0.0072</td><td class="m">0.2185 ± 0.0051</td><td class="pos m">+0.0120</td><td class="m">2.9 × 10⁻⁷</td></tr>
+      <tr><td>v1 global</td><td class="m">0.2 ×9, 0.3 ×3</td><td class="m">0.1907 ± 0.0053</td><td class="m">0.2092 ± 0.0038</td><td class="pos m">+0.0185</td><td class="m">6.3 × 10⁻⁸</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Under selected thresholds, insertion rises to <b>0.134</b> — 63% of its ceiling — and v2 reaches 0.2185 (+0.0336 over CLIPSeg, p = 1.3 × 10⁻¹⁰).</p>
+  <div class="remark flag">
+    <span class="rl">Two things this changes that we are not hiding</span>
+    <p><b>The v2 advantage shrinks.</b> With both heads at their own selected thresholds the gap narrows from +0.0158 to <b>+0.0093</b> (p = 5.8 × 10⁻⁵). Part of v2's edge at a fixed 0.5 was simply that 0.5 happened to suit it better. It remains significant, but it is smaller than the fixed-threshold comparison implies.</p>
+    <p><b>The baseline was not given the same treatment.</b> CLIPSeg is evaluated at its default operating point, so a tuned-threshold comparison tilts toward us. For that reason we keep the <b>fixed-0.5 result (0.2065, +0.0216)</b> as the headline — it is the conservative number — and present the selected-threshold result as a secondary analysis.</p>
+  </div>
+
+  <h3><span class="n">6.3</span>The win is data first, architecture second</h3>
+  <p>It would be convenient to attribute the result to the spatial head. The measurements do not support that reading. Both heads gained almost the same absolute amount from more data (v1 +0.0317, v2 +0.0347), and <b>v1 at 8,306 samples also clears CLIPSeg</b> (+0.0058, p = 2.9 × 10⁻³). The architecture contributes a real and significant +0.0158 on top, but the larger single factor is the training set.</p>
+
+  <h3><span class="n">6.4</span>The heads cross over by edit kind</h3>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 10.</span> Per edit kind at n = 8,306, against the least-squares ceiling recomputed on dev (§7).</caption>
+    <thead><tr><th>Kind</th><th>v2</th><th>v1</th><th>Ceiling</th><th>v2 % of ceiling</th><th>v1 % of ceiling</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>insert</td><td class="m">0.1186</td><td class="m">0.0972</td><td class="m">0.2119</td><td class="m">56.0%</td><td class="m">45.9%</td></tr>
+      <tr><td>modify</td><td class="m">0.2313</td><td class="m">0.2143</td><td class="m">0.3867</td><td class="m">59.8%</td><td class="m">55.4%</td></tr>
+      <tr><td>remove</td><td class="m">0.2007</td><td class="m">0.2166</td><td class="m">0.4325</td><td class="m">46.4%</td><td class="m">50.1%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>v2 wins insertion (+22% relative) and modification (+8%), and <b>loses removal</b> (−7%). This is the hypothesis of §3.3 behaving as predicted rather than a uniform improvement. Removal targets an object that already exists in the frame, which is exactly what a global coefficient over object-shaped prototypes already describes well; the spatial field adds capacity that is not needed there and costs precision. The field earns its keep where there is no source object to point at.</p>
+
+  <figure>
+    <img src="qualitative_full.png" alt="Six rows of predictions: source image with instruction, delta-E ground truth, model prediction, and a colour-coded overlay, covering insert, remove and modify cases.">
+    <figcaption><span class="cn">Figure 2.</span> Predictions from the full-scale v2 head on six distinct dev scenes, chosen by edit kind and deduplicated by scene id rather than selected for appearance — the failures are shown. Red is ground truth only, green prediction only, yellow agreement. The insertion rows display the characteristic failure discussed in §7: the head marks the object the instruction <i>names</i> rather than the region that changes.</figcaption>
+  </figure>
+</section>
+
+<section id="s7">
+  <h2><span class="n">7</span> The representational ceiling</h2>
+  <p class="lede">This is the result we consider most useful, and it is a negative one.</p>
+  <p>To separate “the model has not learned this yet” from “this basis cannot express it”, we fit coefficients <b>directly to the ground-truth mask by least squares</b>. No learning is involved. The result is an upper bound on the IoU that <i>any</i> coefficient predictor could achieve with these 32 prototypes.</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 11.</span> Least-squares upper bound per edit kind, computed on dev.</caption>
+    <thead><tr><th>Kind</th><th>Ceiling IoU</th><th>v2 achieved</th><th>Fraction reached</th></tr></thead>
+    <tbody>
+      <tr><td>remove</td><td class="m">0.4325</td><td class="m">0.2007</td><td class="m">46.4%</td></tr>
+      <tr><td>modify</td><td class="m">0.3867</td><td class="m">0.2313</td><td class="m">59.8%</td></tr>
+      <tr class="hi"><td>insert</td><td class="m">0.2119</td><td class="m">0.1186</td><td class="m">56.0%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>The ceiling for insertion is less than half that for removal.</b> The architecture was originally justified on the reasoning that “prototypes are spatial basis functions, not objects, so a text-derived combination can describe empty space.” That reasoning is wrong, and this measurement refutes it. FastSAM's prototypes were trained to segment objects and carry that bias: they span object-shaped regions roughly twice as well as they span empty space. The mechanism is weakest precisely in the case it was adopted to solve.</p>
+  <p>A companion experiment tested whether the shortfall was simply a lack of insertion data. Trained per-kind at matched sample counts, insertion reached 0.0450 against 0.1568 for modification on the same 497 samples — <b>3.5× worse given identical data volume</b>. Data volume is not the constraint.</p>
+  <div class="remark">
+    <span class="rl">A correction we are making to our own earlier conclusion</span>
+    <p>That per-kind test ran at roughly 500 insertion samples and concluded more data would not help insertion. There are now 1,828, and insertion moved from 44% to <b>56%</b> of its ceiling. The ceiling itself is real and unmoved; we were simply far below it. The claim that survives is <i>“the basis caps insertion at 0.212”</i>, not <i>“data does not help insertion.”</i></p>
+  </div>
+  <p>An attempt to raise the ceiling by appending hand-designed free-space basis functions to the prototype set was <b>rejected by its own control</b>: the geometric basis beat neither a random basis of equal size (+0.0035, p = 0.33) nor plain v2 (−0.0030, p = 0.47). It was dropped. Any gain must beat a random basis of the same dimensionality, and this one did not.</p>
+</section>
+
+<section id="s8">
+  <h2><span class="n">8</span> Training dynamics and ablations</h2>
+
+  <h3><span class="n">8.1</span>The model overfits within a handful of epochs</h3>
+  <figure>
+    <img src="curves.png" alt="Four panels: validation IoU across 60 epochs for both heads with selected epochs marked; a zoom on epochs 1 to 15; training loss; and validation IoU with and without the instruction.">
+    <figcaption><span class="cn">Figure 3.</span> Learning curves, three seeds per head, at n = 8,306. ▼ marks the epoch actually selected. All six fall between epoch 2 and 7 of 60.</figcaption>
+  </figure>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 12.</span> Validation IoU at its peak and at the final epoch.</caption>
+    <thead><tr><th>Head</th><th>Best epochs</th><th>Peak val IoU</th><th>At epoch 60</th><th>Loss in IoU</th></tr></thead>
+    <tbody>
+      <tr><td>v2 spatial</td><td class="m">2, 5, 3</td><td class="m">0.1884</td><td class="m">0.1066</td><td class="neg m">−43%</td></tr>
+      <tr><td>v1 global</td><td class="m">7, 5, 7</td><td class="m">0.1740</td><td class="m">0.1167</td><td class="neg m">−33%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Training loss falls monotonically for all 60 epochs while validation IoU roughly halves, so this is overfitting rather than an optimisation failure. <b>Selecting the checkpoint on a held-out slice of train is what kept every number in this report honest</b> — training to the final epoch would have reported about half the IoU. v2 also leads v1 at the peak, so its advantage is not an artefact of selection.</p>
+  <p>The practical consequence is that 60 epochs is roughly 6× more than needed; about 10 would reach the same checkpoint. We report this because it makes any further experiment on this pipeline substantially cheaper.</p>
+
+  <h3><span class="n">8.2</span>The instruction carries the signal</h3>
+  <p>Zeroing the text embedding at every epoch, on the same checkpoint, collapses validation IoU from 0.188 to roughly 0.03 — a gap of <b>+0.158 for v2</b> and +0.153 for v1 at the peak. The head is reading the instruction, not exploiting an image prior. This control matters because an early version of the pipeline selected epoch-1 blob predictors that scored ~0.14 by covering 20% of the frame and scored <i>identically</i> with the instruction zeroed; checkpoint selection was changed to optimise this delta rather than raw IoU.</p>
+
+  <h3><span class="n">8.3</span>Reproducibility</h3>
+  <p>A separate three-seed run, launched independently with per-epoch logging, reproduced its dev IoU <b>exactly</b> for all six runs: v2 at 0.2058 / 0.1983 / 0.2034 and v1 at 0.1911 / 0.1859 / 0.1827, matching the corresponding seeds of the twelve-seed run to four decimal places.</p>
+
+  <h3><span class="n">8.4</span>Latency</h3>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 13.</span> Measured on the M5, resolution-matched at CLIPSeg's native 352 × 352. Per-image cost is paid once; per-instruction cost is paid for every instruction on that image.</caption>
+    <thead><tr><th>Model</th><th>Trainable</th><th>Per image</th><th>Per instruction</th><th>Speed-up</th><th>Params</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>v2 spatial</td><td class="m">4,693,633</td><td class="m">33.6 ms</td><td class="m">5.30 ms</td><td class="pos m">10.3×</td><td class="pos m">32.1× fewer</td></tr>
+      <tr><td>v1 global</td><td class="m">1,399,073</td><td class="m">33.8 ms</td><td class="m">5.39 ms</td><td class="pos m">10.1×</td><td class="pos m">107.7× fewer</td></tr>
+      <tr><td>CLIPSeg</td><td class="m">150,747,746</td><td class="m">—</td><td class="m">54.3 ms</td><td class="m">1×</td><td class="m">—</td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="6">v2 costs essentially nothing extra over v1 at inference: its additional parameters sit in a small MLP and convolution over a 20 × 20 grid, negligible beside the prototype weighted sum.</td></tr></tfoot>
+  </table>
+  </div>
+  <p>The advantage is structural rather than an implementation detail. Our architecture splits into a <b>per-image</b> stage (frozen backbone → 32 prototypes) and a <b>per-instruction</b> stage (CLIP text encode, a small MLP, a weighted sum). CLIPSeg re-runs a full 150 M encoder–decoder for every instruction and has no such split available. Editing is an iterative activity — a user issues several instructions against one image — so the amortised cost is the one that matters.</p>
+  <p>At our operating resolution of 640 px the backbone costs 98.4 ms and the break-even point is N ≈ 2 instructions; at the matched 352 px both stages are cheaper and we are ahead even at N = 1. We report the matched figure for the per-instruction comparison and note explicitly that <b>our accuracy at 352 px is unmeasured</b> — all IoU numbers in this report are at 640 px.</p>
+</section>
+
+<section id="s9">
+  <h2><span class="n">9</span> Stage 2 — does localization actually help?</h2>
+  <p>A mask metric is only a proxy. This experiment closes the loop and tests the project's central premise directly. One editor (InstructPix2Pix) produces the edit for every arm; the only thing that varies is which mask gates the result back onto the source, so any difference is attributable to the mask alone. 60 held-out dev samples.</p>
+  <p><span class="m">recall</span> is the fraction of the true edit region that changed; <span class="m">collateral</span> the fraction of outside-region pixels that changed; <span class="m">net = recall − collateral</span>.</p>
+  <div class="tw">
+  <table>
+    <caption><span class="cn">Table 14.</span> Stage 2 with a fixed editor and varying gating mask.</caption>
+    <thead><tr><th>Gating mask</th><th>Recall ↑</th><th>Collateral ↓</th><th>Net ↑</th></tr></thead>
+    <tbody>
+      <tr><td>None — whole frame <i>(status quo)</i></td><td class="m">33.3%</td><td class="m">24.2%</td><td class="m">+9.1%</td></tr>
+      <tr><td>Ours, as predicted</td><td class="m">7.5%</td><td class="m">1.5%</td><td class="m">+6.0%</td></tr>
+      <tr class="hi"><td>Ours, tuned (thr 0.2, dilate 64 px)</td><td class="m">22.9%</td><td class="m">8.8%</td><td class="m">+14.2%</td></tr>
+      <tr><td>MagicBrush human mask</td><td class="m">31.5%</td><td class="m">13.0%</td><td class="m">+18.5%</td></tr>
+      <tr><td>Ground-truth region <i>(oracle)</i></td><td class="m">30.2%</td><td class="m">0.1%</td><td class="m">+30.1%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>The premise holds.</b> Editing inside the correct region is worth <b>3.3×</b> — +30.1% against +9.1% for whole-frame editing. This is direct evidence that localization pays off downstream and not merely on a mask metric.</p>
+  <p><b>Our mask was precision-biased, and that was fixable.</b> As predicted it produced only 1.5% collateral but 7.5% recall: gating discarded most of the edit, and net fell <i>below</i> whole-frame editing. Dilation trades precision for recall. Swept to 200 px across two thresholds, net <b>peaks at 64 px</b> (+14.2%) and declines monotonically beyond it — 96 px +14.1%, 128 px +13.8%, 160 px +13.2%, 200 px +12.3% — so 64 px is a true optimum rather than the edge of the search.</p>
+  <p><b>Coarse supervision costs at the editing stage too.</b> The MagicBrush mask, 9.1× too large, carries 13.0% collateral and loses 11.6 points of net against the ground-truth region. The cost of that supervision is not confined to the mask metric; it propagates into the edited image.</p>
+  <div class="remark flag">
+    <span class="rl">Where we still lose</span>
+    <p>Our tuned mask beats whole-frame editing but does <b>not</b> beat the MagicBrush human mask (+14.2% vs +18.5%). Their masks are far too large yet retain more of the edit. Closing that gap requires raising recall without reintroducing collateral, which is the same representational problem as §7 seen from the other end. Caveats: 60 samples, one editor, one guidance setting.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <h2><span class="n">10</span> Limitations</h2>
+  <ol>
+    <li><b>The insertion ceiling is unsolved.</b> 0.212 is a hard bound for this basis. Our best result reaches 56% of it. Raising the bound requires a basis that spans empty space, and our one attempt at that was rejected by its control (§7).</li>
+    <li><b>Hyperparameters are stale.</b> Learning rate, hidden width, grid size, epoch count and loss weighting were all tuned at n = 2,278 and reused unchanged at n = 8,306 so that data size would be the only variable. The reported numbers are therefore a <i>lower bound</i>; a re-sweep at full scale would likely improve them.</li>
+    <li><b>The backbone stays frozen.</b> This is a deliberate trade — it is what produces the 32× parameter and 10.3× latency advantages — but it caps achievable accuracy.</li>
+    <li><b>Stage 2 uses InstructPix2Pix</b> as the editor, on 60 samples with one guidance setting. Stable Diffusion inpainting weights are downloaded but not yet used.</li>
+    <li><b>Accuracy at 352 px is unmeasured</b>, so the resolution-matched latency comparison is a latency comparison only (§8.4).</li>
+    <li><b>The baseline's operating point was not tuned.</b> CLIPSeg is evaluated at its default threshold while ours is selected on train-val (§6.2). The headline comparison therefore uses our fixed 0.5, which is the conservative choice; a like-for-like tuned comparison would require a held-out split for CLIPSeg too.</li>
+    <li><b>AdaptEdit itself is not reproduced</b> and no claim here is a comparison against its reported numbers. We reimplement its mechanism at a different scale and measure what it does not report.</li>
+  </ol>
+</section>
+
+<section id="s11">
+  <h2><span class="n">11</span> Conclusion and next steps</h2>
+  <p>A 4.7 M head over entirely frozen features predicts edit regions better than a 150.7 M pretrained referring segmenter and better than the dataset's own human annotations, at 32× fewer trainable parameters and 10.3× lower per-instruction latency, trained end to end on a single laptop. Localization is worth 3.3× downstream, which validates the two-stage premise.</p>
+  <p>The honest headline, though, is the bound. Insertion — the case our base paper names as its own limitation and the case this project exists to address — is capped at 0.212 by a prototype basis trained to segment objects rather than to describe empty space. We closed part of the gap to that bound with data; we did not move the bound.</p>
+  <p>The work that follows from this is therefore specific rather than general:</p>
+  <ol>
+    <li><b>Attack the basis, not the head.</b> The ceiling is a property of the 32 prototypes. Learning a small number of additional prototypes supervised on insertion regions — and required to beat a random-basis control of equal size — is the direct test.</li>
+    <li><b>Re-sweep hyperparameters at 8,306 samples</b>, now cheap given that ~10 epochs suffice.</li>
+    <li><b>Raise Stage 2 recall</b> without reintroducing collateral, to pass the MagicBrush mask's +18.5%.</li>
+  </ol>
+</section>
+
+<section id="s12">
+  <h2><span class="n">12</span> Reproduction</h2>
+  <p>All results were produced on one machine: Apple M5, 10 cores, 26 GB unified memory, macOS 26.6.2, PyTorch 2.13.0 on the MPS backend, NumPy 2.2.6, OpenCV 5.0.0, Ultralytics 8.3.209, SciPy 1.15.3.</p>
+  <pre>python train/precompute_full.py --split train --batch 8      # 35.0 min → 8,306 samples, 13.8 GB
+python train/leakage_check.py                                # 0 overlapping images
+python train/clean_eval_full.py --seeds 12 --configs v2,v1   # ~9 h, 12 seeds each
+python train/clean_eval_full.py --seeds 3 --configs v2,v1 --curves
+python train/latency_v2.py                                   # both heads, matched resolution
+python train/plots_full.py &amp;&amp; python train/curve_plots.py</pre>
+  <figure>
+    <img src="run_evidence.png" alt="Terminal output from the feature cache build, the leakage audit, and the training run.">
+    <figcaption><span class="cn">Figure 4.</span> Output from the runs that produced this report, copied verbatim from the logs on this machine.</figcaption>
+  </figure>
+  <p>Measured wall times: feature precompute over 8,807 rows, 35.0 min; leakage audit over 55 shards, ~9 min; v2 training, 37–40 min per seed; v1 training, ~32 min per seed. Roughly 21 hours of compute in total.</p>
+</section>
+
+<footer>
+  Amritha S (23BEC1368) · Yugeshwaran P (23BEC1404) · Guide Dr. Saranya M (54783) · School of Electronics Engineering, VIT Chennai · Foundations of Data Science, Review 1 · 13 September 2026
+</footer>
+</div>
