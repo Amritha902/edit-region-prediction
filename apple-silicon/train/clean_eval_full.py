@@ -119,14 +119,14 @@ def run(make,name,seeds,epochs):
         i,byk=fullres(head)                            # dev touched once
         out.append((i,byk)); CURVES.append(dict(config=name,seed=sd,best_epoch=best_ep,
                                                 dev_iou=i,curve=curve))
-        json.dump(CURVES, open(HERE/"curves_full.json","w"), indent=2)
+        json.dump(CURVES, open(HERE/f"curves_{Path(A.out).stem}.json","w"), indent=2)
         print(f"    seed {sd}: dev full-res IoU {i:.4f}  ({(time.time()-t0)/60:.1f} min)",flush=True)
         # Dump after every seed, not every config: a 9-hour run that dies in
         # seed 10 should not lose the nine that finished.
         json.dump(dict(name=name, partial=True, n_train=TR.n, epochs=epochs,
                        seeds_done=[s for s in seeds[:len(out)]],
                        iou=[o[0] for o in out], by_kind=[o[1] for o in out]),
-                  open(HERE/f"partial_{name.split()[0]}.json","w"), indent=2)
+                  open(HERE/f"partial_{Path(A.out).stem}_{name.split()[0]}.json","w"), indent=2)
         torch.save(dict(head=best[1],seed=sd,dev_iou=i,n_train=TR.n,name=name),
                    HERE/f"head_full_{name.split()[0]}_s{sd}.pt")
     A_=np.array([o[0] for o in out])

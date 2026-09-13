@@ -23,11 +23,20 @@ def load():
     for r in old:
         if r["name"].startswith("v1"): g[("v1",2278)]=(r["seeds"], r["by_kind"])
         if r["name"]=="v2 spatial":    g[("v2",2278)]=(r["seeds"], r["by_kind"])
-    for tag,f in (("v2","partial_v2.json"),("v1","partial_v1.json")):
+    # The completed run is authoritative. partial_*.json is only a crash
+    # checkpoint, and a later run with the same config name overwrites it --
+    # the 3-seed curve run clobbered the 12-seed v2 partial exactly that way.
+    fin=HERE/"clean_eval_full.json"
+    if fin.exists():
+        for r in json.load(open(fin)):
+            tag="v2" if r["name"].startswith("v2") else "v1"
+            g[(tag,r["n_train"])]=(r["seeds"], r["by_kind"])
+    for tag,f in (("v2","partial_clean_eval_full_v2.json"),
+                  ("v1","partial_clean_eval_full_v1.json")):
         p=HERE/f
         if not p.exists(): continue
         d=json.load(open(p))
-        if len(d["iou"])<2: continue
+        if len(d["iou"])<2 or (tag,d["n_train"]) in g: continue
         bk={k:float(np.mean([b[k] for b in d["by_kind"] if k in b])) for k in CEIL}
         g[(tag,d["n_train"])]=(d["iou"], bk)
     return g
