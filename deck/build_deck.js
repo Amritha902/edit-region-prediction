@@ -31,9 +31,9 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  s.addText("Guide  ·  Dr. Saranya M  (54783)\nSchool of Electronics Engineering  ·  VIT Chennai",{x:M,y:3.88,w:6.2,h:0.7,fontFace:BODY,fontSize:12,color:MUTE,lineSpacing:17,margin:0});
  tint(s,W-M-4.8,2.90,4.8,2.05,"EAF5EE");
  lab(s,W-M-4.55,3.10,4.3,"Headline result",{color:GRN});
- s.addText([{text:"IoU 0.1718",options:{bold:true}},{text:"  ·  beats the human annotations the base paper trains on (0.1511)\n"},
-            {text:"+71%",options:{bold:true}},{text:"  on insertion vs CLIPSeg\n"},
-            {text:"9.7×",options:{bold:true}},{text:"  faster, "},{text:"108×",options:{bold:true}},{text:"  fewer trainable parameters"}],
+ s.addText([{text:"IoU 0.2065",options:{bold:true}},{text:"  ·  beats CLIPSeg (0.1849) and the human annotations (0.1511)\n"},
+            {text:"+120%",options:{bold:true}},{text:"  on insertion vs CLIPSeg\n"},
+            {text:"10.3×",options:{bold:true}},{text:"  faster, "},{text:"32×",options:{bold:true}},{text:"  fewer trainable parameters"}],
    {x:W-M-4.55,y:3.38,w:4.3,h:1.4,fontFace:BODY,fontSize:11.5,color:GRN,lineSpacing:17,margin:0});
  s.addShape(pres.ShapeType.rect,{x:0,y:H-0.5,w:W,h:0.012,fill:{color:RULE}});
  s.addNotes("PH1");}
@@ -105,11 +105,11 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  lab(s,M+6.75,2.08,4.5,"Measured head-to-head, matched conditions",{color:GRN});
  const h=[["head","params","IoU"],
   ["their mechanism","923 K","0.1050"],
-  ["ours, global coeff","1.4 M","0.1590"],
-  ["ours, spatial field","4.7 M","0.1718"]];
+  ["ours, global coeff","1.4 M","0.1907"],
+  ["ours, spatial field","4.7 M","0.2065"]];
  tbl(s,h,{x:M+6.75,y:2.38,w:4.4,colW:[2.0,1.1,1.3],rowH:0.32,fontSize:10,centerCols:[1,2],hiRows:[3]});
- s.addText("Identical inputs, data, loss, schedule and seeds.\nSpatial vs global:  p = 0.0070  (12 seeds).",
-  {x:M+6.75,y:3.78,w:4.4,h:0.5,fontFace:BODY,fontSize:10.5,color:GRN,lineSpacing:14,margin:0});
+ s.addText("Identical inputs, data, loss, schedule and seeds; 8,306 samples.\nSpatial vs global:  p = 5.4e-06,  Cohen's d = 2.50  (12 seeds).\nTheir mechanism was measured at 2,278 only.",
+  {x:M+6.75,y:3.74,w:4.4,h:0.62,fontFace:BODY,fontSize:9.5,color:GRN,lineSpacing:13,margin:0});
  tint(s,M+6.5,4.45,CW-6.5,1.15,"FBEAEA");
  lab(s,M+6.75,4.62,4.5,"What is shared, not claimed",{color:"A33A2C"});
  s.addText("FiLM modulation and BCE + Dice are their design too — we reached the same choices independently.",
@@ -117,22 +117,77 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  s.addNotes("PH5");}
 
 /* 6 RESULTS FIGURE */
-{const s=slide("Results","Accuracy against cost, and where the win is","503 held-out dev samples · trained on 2,278 disjoint samples · 12 seeds");
- s.addImage({path:"img/frontier.png",x:M,y:1.86,w:CW,h:CW/2.81});
- tint(s,M,6.10,CW,0.95,"EAF5EE");
- s.addText([{text:"0.1718 ± 0.0099",options:{bold:true}},{text:"  —  above the human masks (0.1511) and 93% of CLIPSeg (0.1849), at "},
-  {text:"108× fewer trainable parameters",options:{bold:true}},{text:" and "},{text:"9.7× lower latency",options:{bold:true}},
-  {text:".  On insertion we beat CLIPSeg by 71%; the human masks still lead there."}],
-  {x:M+0.32,y:6.30,w:CW-0.64,h:0.62,fontFace:BODY,fontSize:11.5,color:GRN,lineSpacing:16,margin:0});
+{const s=slide("Results","Every seed, at both training-set sizes","503 held-out dev samples · 8,306 training samples · 12 seeds per configuration");
+ s.addImage({path:"img/results.png",x:M,y:1.80,w:7.05,h:7.05/1.739});
+ const mt=[["metric","v2 spatial","v1 global"],
+  ["IoU","0.2065","0.1907"],
+  ["Precision","0.3126","0.2972"],
+  ["Recall","0.3878","0.3510"],
+  ["F1 / Dice","0.2976","0.2757"]];
+ tbl(s,mt,{x:M+7.35,y:1.92,w:4.28,colW:[1.68,1.34,1.26],rowH:0.34,fontSize:10,centerCols:[1,2],hiRows:[1]});
+ tint(s,M+7.35,4.00,4.28,1.62,"EAF5EE");
+ lab(s,M+7.55,4.18,3.9,"Against the baselines",{color:GRN});
+ s.addText("CLIPSeg  0.1849   +0.0216  p=5.2e-07\nHuman masks  0.1511   +0.0554\nAll 12 seeds clear CLIPSeg.",
+  {x:M+7.55,y:4.44,w:3.9,h:1.1,fontFace:BODY,fontSize:10.5,color:GRN,lineSpacing:15,margin:0});
+ tint(s,M,6.28,CW,0.80,"EAF5EE");
+ s.addText([{text:"0.2065 ± 0.0072",options:{bold:true}},{text:"  —  now above CLIPSeg (0.1849) as well as the human masks, at "},
+  {text:"32× fewer trainable parameters",options:{bold:true}},{text:" and "},{text:"10.3× lower per-instruction latency",options:{bold:true}},
+  {text:".  Insertion 0.1186 vs CLIPSeg 0.054 — +120%."}],
+  {x:M+0.32,y:6.44,w:CW-0.64,h:0.56,fontFace:BODY,fontSize:11,color:GRN,lineSpacing:15,margin:0});
  s.addNotes("PH6");}
 
+/* 6b KEY PARAMETERS */
+{const s=slide("Configuration","Every parameter behind those numbers","Taken from the source, not from notes");
+ const c=[["group","parameter","value"],
+  ["Supervision","ΔE metric / threshold","CIE76 in L*a*b*  ·  12.0"],
+  ["","morph kernel · min component","5×5  ·  40 px"],
+  ["","sample filter (changed area)","0.4% – 45%"],
+  ["Representation","input · prototypes","640×640  ·  32 at 160×160"],
+  ["","text · image context","512-d CLIP  ·  640-d SPPF   (both frozen)"],
+  ["Head (v2)","coefficient grid · hidden","20×20 bilinear  ·  512  ·  dropout 0"],
+  ["Optimisation","AdamW · lr · decay","1e-3 cosine to 0  ·  0.01"],
+  ["","batch · loss · clip","32  ·  BCE + 2×Dice  ·  norm 1.0"],
+  ["Evaluation","epochs · selection","60  ·  best on train-val, never dev"],
+  ["","threshold · seeds","0.5 fixed  ·  12 (1368, 1–11)"],
+  ["","baseline","CIDAS/clipseg-rd64-refined"]];
+ tbl(s,c,{y:1.78,colW:[2.0,3.1,6.53],rowH:0.355,fontSize:10});
+ tint(s,M,6.32,CW,0.78);
+ s.addText("8,306 usable training turns from all 51 MagicBrush shards (8,807 rows, 501 rejected as degenerate).  Splits verified image-disjoint: 794 dev images, 13,317 train, 0 overlap.",
+  {x:M+0.32,y:6.50,w:CW-0.64,h:0.5,fontFace:BODY,fontSize:11,color:INK,lineSpacing:15,margin:0});
+ s.addNotes("PH6b");}
+
+/* 6c OPERATING POINT */
+{const s=slide("Operating point","IoU alone hides the precision/recall trade-off","Threshold chosen on train-val, never on dev");
+ const t1=[["threshold","IoU","precision","recall","predicted area"],
+  ["0.2","0.2172","0.2637","0.5775","22.74%"],
+  ["0.3","0.2180","0.2818","0.5063","18.10%"],
+  ["0.5  (reported)","0.2065","0.3126","0.3878","11.70%"],
+  ["0.7","0.1747","0.3458","0.2750","6.90%"],
+  ["0.9","0.1119","0.3705","0.1479","2.74%"]];
+ tbl(s,t1,{y:1.80,colW:[2.5,2.2,2.3,2.3,2.33],rowH:0.38,fontSize:10.5,centerCols:[1,2,3,4],hiRows:[3]});
+ s.addText("True changed area is 9.58%, so at 0.5 the model over-predicts slightly.",
+  {x:M,y:4.28,w:CW,h:0.3,fontFace:BODY,fontSize:10.5,color:MUTE,italics:true,margin:0});
+ tint(s,M,4.66,CW,1.32,"EAF5EE");
+ lab(s,M+0.32,4.84,8,"Selected honestly, on the train-val slice",{color:GRN});
+ s.addText("v2 picks 0.3 (×7) or 0.2 (×5) → dev 0.2185 ± 0.0051, +0.0120 over fixed 0.5 (paired p = 2.9e-07). Insertion rises to 0.134, 63% of its ceiling.",
+  {x:M+0.32,y:5.12,w:CW-0.64,h:0.76,fontFace:BODY,fontSize:11,color:GRN,lineSpacing:15,margin:0});
+ tint(s,M,6.10,CW,0.98,"FBEAEA");
+ lab(s,M+0.32,6.26,8,"Why the headline still quotes 0.5",{color:"A33A2C"});
+ s.addText("CLIPSeg is evaluated at its default threshold, so a tuned comparison would tilt toward us. We report the conservative number. With both heads tuned, the v2 lead narrows from +0.0158 to +0.0093.",
+  {x:M+0.32,y:6.52,w:CW-0.64,h:0.5,fontFace:BODY,fontSize:10.5,color:"A33A2C",lineSpacing:14,margin:0});
+ s.addNotes("PH6c");}
+
 /* 7 ANALYSIS FIGURE */
-{const s=slide("Analysis","Cost, controls, and how much headroom is left",null);
- s.addImage({path:"img/analysis.png",x:M,y:1.55,w:CW,h:CW/3.34});
- const r=[["Cost amortises","break-even at N = 2 instructions on one image; 9.0× at N = 100, because the backbone runs once and each instruction costs 5.6 ms"],
-  ["Controls included","the spatial field is significant (p = 0.0070); the geometric basis is not (p = 0.33 against a random control) and was dropped"],
-  ["Headroom is known","we reach 44% / 50% / 42% of the least-squares ceiling — the bound on any coefficient predictor over this basis"]];
- tbl(s,r,{y:5.30,colW:[2.6,9.03],rowH:0.42,fontSize:10});
+{const s=slide("Training dynamics","The best epoch is 2–7 of 60, and language carries the signal","3 seeds per head at 8,306 samples · ▼ marks the epoch actually selected");
+ s.addImage({path:"img/curves.png",x:M,y:1.74,w:7.9,h:7.9/1.778});
+ const r=[["Overfits fast","validation IoU peaks at epoch 2–7 then halves by epoch 60, while training loss falls throughout"],
+  ["Selection saved it","choosing on a held-out train slice is why the reported numbers hold; the last epoch would have reported half"],
+  ["Language is real","zeroing the instruction collapses IoU from 0.188 to ~0.03 — a gap of +0.158"],
+  ["Reproducible","all 6 curve seeds reproduced their 12-seed dev IoU exactly, to four decimals"]];
+ tbl(s,r,{x:M+8.15,y:1.86,w:3.48,colW:[1.25,2.23],rowH:0.90,fontSize:9});
+ tint(s,M,6.22,CW,0.85);
+ s.addText("Latency, resolution-matched at CLIPSeg's native 352 px:  v2 per-instruction 5.30 ms vs 54.3 ms = 10.3×, at 32× fewer trainable parameters.  The backbone runs once per image (33.6 ms); each further instruction costs only the head.",
+  {x:M+0.32,y:6.40,w:CW-0.64,h:0.56,fontFace:BODY,fontSize:11,color:INK,lineSpacing:15,margin:0});
  s.addNotes("PH7");}
 
 /* 8 STAGE 2 */
@@ -162,9 +217,11 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
   ["Contamination audit","an early headline trained on the evaluation split; retracted in the repository and re-run on disjoint shards"],
   ["Selection-bias audit","choosing the best epoch by dev IoU had inverted the v1/v2 conclusion; selection moved to a held-out slice of train"],
   ["Random-basis controls","two proposed improvements — free-space and geometric bases — failed against noise and were dropped"],
-  ["Resolution matching","latency was measured at 640 px against CLIPSeg’s 352 px; re-measured matched, 9.7× rather than 10.8×"],
-  ["Ceiling consistency","the headroom figure compared a train-set bound to a dev score; recomputed on dev"]];
- tbl(s,r,{y:1.42,colW:[2.9,8.73],rowH:0.62,fontSize:10.5});
+  ["Latency fairness","measured at 640 px against CLIPSeg’s 352 px, and only for v1 — re-measured matched and for the reported head: v2 is 10.3×"],
+  ["Ceiling consistency","the headroom figure compared a train-set bound to a dev score; recomputed on dev"],
+  ["Leakage audit","MagicBrush is multi-turn, so before scaling 3.65× we hashed every image on both sides — 0 of 794 dev images appear in train"],
+  ["Threshold selection","dev peaks at 0.3, but adopting it would be test-set tuning; the threshold is chosen on train-val instead"]];
+ tbl(s,r,{y:1.42,colW:[2.9,8.73],rowH:0.47,fontSize:9.5});
  tint(s,M,5.10,CW,0.95);
  s.addText("Two claims were retracted and two proposed improvements rejected by their own controls. That is why the three results that remain are worth stating.",
   {x:M+0.32,y:5.32,w:CW-0.64,h:0.6,fontFace:HEAD,fontSize:13,italics:true,color:INK,lineSpacing:17,margin:0});
@@ -176,9 +233,9 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
 /* 9 PLAN */
 {const s=slide("What follows","Three months, and the bar each step must clear",null);
  const p=[["Month","Focus","Deliverable","Must beat"],
-  ["1 · Sep–Oct","Supervision at scale","all 51 MagicBrush shards (~8,800 turns); re-measure the scaling curve","0.1718 at 2,278 samples"],
+  ["1 · Sep–Oct","Supervision at scale — DONE","all 51 shards trained: 8,306 turns, 24 seeded runs, 0.1718 → 0.2065","0.1718 — cleared, p=4.1e-09"],
   ["2 · Oct–Nov","Features, not heads","exp08/11 show the head is not the insertion bottleneck — test text-conditioned features","a random-basis control of equal size"],
-  ["3 · Nov–Dec","Editing and evaluation","mask-conditioned inpainting; collateral change outside the region — Review 2","CLIPSeg at 0.1849"]];
+  ["3 · Nov–Dec","Editing and evaluation","mask-conditioned inpainting; collateral change outside the region — Review 2","MagicBrush mask at +18.5% net"]];
  tbl(s,p,{y:1.38,colW:[1.6,2.1,5.4,2.53],rowH:0.70,fontSize:10});
  lab(s,M,4.15,9,"The methodological bar this project already holds itself to");
  const b=[["Every claim reports its ablation","a config scoring IoU 0.1429 with delta −0.0012 was a blob predictor ignoring the instruction"],

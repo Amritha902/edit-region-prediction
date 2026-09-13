@@ -93,7 +93,11 @@ class SpatialCoeffHead(nn.Module):
 
         f = self.field(v).view(B, 16, self.grid, self.grid)
         cf = self.field_conv(f)                        # B, nb, grid, grid
-        cf = F.interpolate(cf, size=(P, P), mode="bilinear", align_corners=False)
+        # Upsample to the prototypes' actual size, not a fixed 160. At 640 input
+        # proto is 160x160 so this is identical to the trained behaviour; it only
+        # lets the same weights run at other input resolutions, which is needed
+        # to time this head against CLIPSeg at its native 352.
+        cf = F.interpolate(cf, size=proto.shape[-2:], mode="bilinear", align_corners=False)
 
         c = cg[:, :, None, None] + cf                  # global prior + local field
         Bs = self.basis(proto)

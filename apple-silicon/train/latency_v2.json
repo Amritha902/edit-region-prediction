@@ -1,0 +1,29 @@
+{
+  "v1": {
+    "params": 1399073,
+    "352": {
+      "per_image_ms": 33.81032397483068,
+      "per_instruction_ms": 5.387354175036307
+    },
+    "640": {
+      "per_image_ms": 98.44436979983584,
+      "per_instruction_ms": 5.119650000051479
+    }
+  },
+  "v2": {
+    "params": 4693633,
+    "352": {
+      "per_image_ms": 33.62959165024222,
+      "per_instruction_ms": 5.297111449908698
+    },
+    "640": {
+      "per_image_ms": 98.43742917510099,
+      "per_instruction_ms": 5.78461770019203
+    }
+  },
+  "clipseg": {
+    "per_instruction_ms": 54.3,
+    "params": 150747746,
+    "size": 352
+  }
+}
