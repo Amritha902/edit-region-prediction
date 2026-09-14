@@ -27,6 +27,8 @@ ap.add_argument("--steps",type=int,default=20)
 ap.add_argument("--seed",type=int,default=1368)
 ap.add_argument("--thr",type=float,default=0.2)
 ap.add_argument("--dilations",default="0,16,32")
+ap.add_argument("--thrs",default="")
+ap.add_argument("--out",default="stage2_sd_sweep.json")
 a=ap.parse_args()
 DILS=[int(x) for x in a.dilations.split(",")]
 dev=pick_device("auto")
@@ -88,41 +90,44 @@ for r in rows:
     cache.append((src,gt,p,r["ins"]))
 print("probability maps cached\n", flush=True)
 
+THRS=[float(x) for x in a.thrs.split(",")] if a.thrs else [a.thr]
 out={}
 t0=time.time()
-for dil in DILS:
-    rec=[];coll=[];ps=[];area=[]
-    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2*dil+1,2*dil+1)) if dil>0 else None
-    for i,(src,gt,p,ins) in enumerate(cache):
-        m = p > a.thr
-        if k is not None: m = cv2.dilate(m.astype(np.uint8),k)>0
-        area.append(float(m.mean()))
-        if m.sum()<64: continue
-        g2=torch.Generator("cpu").manual_seed(1368+i)
-        o=inp(prompt=ins, image=src, mask_image=Image.fromarray((m*255).astype(np.uint8)),
-              num_inference_steps=a.steps, generator=g2).images[0].resize(src.size)
-        r_,c_,ps_=metrics(src,o,gt); rec.append(r_); coll.append(c_); ps.append(ps_)
-        if (i+1)%20==0:
-            el=time.time()-t0
-            print(f"  dil {dil}: {i+1}/{len(cache)}  {el:.0f}s", flush=True)
-    R,C=float(np.mean(rec)),float(np.mean(coll))
-    out[dil]=dict(recall=R,collateral=C,net=R-C,psnr=float(np.mean(ps)),
-                  mask_area=float(np.mean(area)),n=len(rec))
-    print(f"  dilate {dil:3d} px -> recall {R:.1%}  collateral {C:.1%}  net {R-C:+.1%}  "
-          f"PSNR {np.mean(ps):.2f}  mask area {np.mean(area):.1%}", flush=True)
+for thr_ in THRS:
+  a.thr=thr_
+  for dil in DILS:
+      rec=[];coll=[];ps=[];area=[]
+      k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2*dil+1,2*dil+1)) if dil>0 else None
+      for i,(src,gt,p,ins) in enumerate(cache):
+          m = p > a.thr
+          if k is not None: m = cv2.dilate(m.astype(np.uint8),k)>0
+          area.append(float(m.mean()))
+          if m.sum()<64: continue
+          g2=torch.Generator("cpu").manual_seed(1368+i)
+          o=inp(prompt=ins, image=src, mask_image=Image.fromarray((m*255).astype(np.uint8)),
+                num_inference_steps=a.steps, generator=g2).images[0].resize(src.size)
+          r_,c_,ps_=metrics(src,o,gt); rec.append(r_); coll.append(c_); ps.append(ps_)
+          if (i+1)%20==0:
+              el=time.time()-t0
+              print(f"  dil {dil}: {i+1}/{len(cache)}  {el:.0f}s", flush=True)
+      R,C=float(np.mean(rec)),float(np.mean(coll))
+      out[f"{thr_}_{dil}"]=dict(thr=thr_,dil=dil,recall=R,collateral=C,net=R-C,psnr=float(np.mean(ps)),
+                    mask_area=float(np.mean(area)),n=len(rec))
+      print(f"  dilate {dil:3d} px -> recall {R:.1%}  collateral {C:.1%}  net {R-C:+.1%}  "
+            f"PSNR {np.mean(ps):.2f}  mask area {np.mean(area):.1%}", flush=True)
 
 prev=json.load(open(HERE/"stage2_sd.json"))["arms"]
-out[64]=dict(recall=prev["B our mask"]["recall"],collateral=prev["B our mask"]["collateral"],
-             net=prev["B our mask"]["net"],psnr=prev["B our mask"]["psnr"],
-             mask_area=None,n=prev["B our mask"]["n"])
-json.dump(dict(thr=a.thr,n=a.n,steps=a.steps,arms_fixed=prev,sweep=out),
-          open(HERE/"stage2_sd_sweep.json","w"), indent=2)
-print(f"\n{'dilate':>8} {'recall':>9} {'collateral':>12} {'net':>9} {'PSNR out':>10}")
-for dil in sorted(out):
-    v=out[dil]
-    print(f"{dil:>6} px {v['recall']:>8.1%} {v['collateral']:>11.1%} {v['net']:>+8.1%} {v['psnr']:>9.2f}")
+json.dump(dict(n=a.n,steps=a.steps,arms_fixed=prev,sweep=out),
+          open(HERE/a.out,"w"), indent=2)
+print(f"\n{'thr':>5} {'dilate':>7} {'recall':>9} {'collateral':>12} {'net':>9} {'PSNR':>8}")
+for k in sorted(out, key=lambda k:(out[k]["thr"],out[k]["dil"])):
+    v=out[k]
+    print(f"{v['thr']:>5} {v['dil']:>5} px {v['recall']:>8.1%} {v['collateral']:>11.1%} "
+          f"{v['net']:>+8.1%} {v['psnr']:>7.2f}")
 best=max(out,key=lambda k:out[k]["net"])
-print(f"\n  best net at {best} px: {out[best]['net']:+.1%}  (64 px gave {out[64]['net']:+.1%})")
+b=out[best]
+print(f"\n  best net: thr {b['thr']} dilate {b['dil']} px -> {b['net']:+.1%} "
+      f"at {b['collateral']:.1%} collateral")
 print(f"  whole-frame {prev['A whole-frame']['net']:+.1%} | GT oracle {prev['C GT mask']['net']:+.1%} "
       f"| MagicBrush {prev['D MagicBrush mask']['net']:+.1%}")
 print("wrote train/stage2_sd_sweep.json")
