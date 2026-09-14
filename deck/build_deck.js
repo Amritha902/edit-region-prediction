@@ -200,6 +200,7 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
   ["ours, tuned — peak of the sweep","22.9%","8.8%","+14.2%"],
   ["MagicBrush human mask","31.5%","13.0%","+18.5%"],
   ["ground-truth region","30.2%","0.1%","+30.1%"]];
+ // second arm: a real inpainting model, where the mask decides what is regenerated
  tbl(s,r,{y:1.88,colW:[4.2,2.6,2.6,2.23],rowH:0.40,fontSize:10.5,centerCols:[1,2,3],hiRows:[3]});
  tint(s,M,4.50,6.1,1.55);
  lab(s,M+0.3,4.70,5.5,"The premise holds",{color:GRN});
@@ -212,6 +213,30 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  s.addText("Coarse supervision costs at the editing stage too, not only on the mask metric: the MagicBrush mask — measured 9.1× too large — loses 11.6 points of net against the ground-truth region.",
   {x:M,y:6.22,w:CW,h:0.5,fontFace:BODY,fontSize:10.5,color:MUTE,italics:true,lineSpacing:14,margin:0});
  s.addNotes("This closes the loop and tests the premise nobody had tested: does predicting the region actually improve the EDIT?\n\nSame editor for every row — InstructPix2Pix. Only the gating mask changes. So any difference is the mask.\n\nThe headline: editing inside the correct region is worth 3.3 times. Plus 30.1 percent net for the ground-truth region against plus 9.1 for whole-frame editing.\n\nOur mask as predicted was too conservative — 1.5 percent collateral but only 7.5 percent recall, so gating threw away most of the edit. Dilating to 64 pixels fixes it: plus 14.2 percent. We swept to 200 pixels and confirmed 64 is a true peak, not the edge of the search.\n\nBE HONEST: we do not beat the MagicBrush human mask here — 14.2 against 18.5. Their masks are far too large but retain more of the edit. Closing that is the same representational problem seen from the other end.");}
+
+/* 8b STAGE 2 WITH REAL INPAINTING */
+{const s=slide("Stage 2, part two","With a real inpainting model, localization is worth 5.8×","60 held-out dev samples · the mask now decides what gets regenerated, not just what is kept");
+ const r=[["gating mask","recall ↑","collateral ↓","net ↑"],
+  ["none — whole frame","33.3%","24.2%","+9.1%"],
+  ["ours, tuned (thr 0.3, 32 px)","61.7%","22.2%","+39.5%"],
+  ["MagicBrush human mask","78.4%","51.7%","+26.8%"],
+  ["ground-truth region","59.4%","6.4%","+53.0%"]];
+ tbl(s,r,{y:1.80,colW:[4.2,2.5,2.5,2.43],rowH:0.44,fontSize:11.5,centerCols:[1,2,3],hiRows:[2]});
+ tint(s,M,4.15,CW,0.9);
+ s.addText([{text:"We now beat the human annotation",options:{bold:true}},
+  {text:"  —  +39.5% against +26.8%, reversing the one comparison the compositing test lost. And collateral 22.2% is "},
+  {text:"below",options:{bold:true}},{text:" whole-frame editing's 24.2%, so we win on both quantities rather than trading one for the other."}],
+  {x:M+0.32,y:4.36,w:CW-0.64,h:0.62,fontFace:BODY,fontSize:11.5,color:INK,lineSpacing:16,margin:0});
+ lab(s,M,5.20,10,"The operating point had to be found jointly");
+ const g=[["","0 px","16 px","32 px","48 px","64 px"],
+  ["thr 0.2","+31.2","+36.9","+36.7","+35.7","+32.7"],
+  ["thr 0.3","+28.6","+36.5","+39.5","+37.9","+33.3"],
+  ["thr 0.4","+26.5","+34.9","+38.4","+39.4","+35.9"],
+  ["thr 0.5","+24.2","+32.8","+36.2","+38.4","+37.9"]];
+ tbl(s,g,{y:5.48,colW:[1.63,2.0,2.0,2.0,2.0,2.0],rowH:0.30,fontSize:10,centerCols:[1,2,3,4,5],hiRows:[2]});
+ s.addText("Optimal dilation rises with threshold — 16, 32, 48, 48 px. Sweeping dilation alone found a local optimum on one slice. The peak is interior on both axes.",
+  {x:M,y:6.85,w:CW,h:0.4,fontFace:BODY,fontSize:10.5,color:MUTE,italics:true,margin:0});
+ s.addNotes("This is the strongest downstream result and it came from re-tuning, not from a new model.\n\nThe first inpainting run reused 64 px of dilation from the compositing experiment, where an over-large mask costs nothing because it can only subtract. Under inpainting the mask decides what gets REGENERATED, so too much dilation destroys content that should have been preserved. Collateral came out at 39.1% — worse than whole-frame editing.\n\nSweeping threshold and dilation jointly, 20 cells, found 0.3 and 32 px: +39.5% net at 22.2% collateral. That is below whole-frame's 24.2%, so we beat the status quo on both quantities now.\n\nThe shape is the real finding. Every row has its own peak and the optimal dilation rises with the threshold. A higher threshold gives a smaller raw mask which needs more dilation to reach the same coverage, so the two trade along a ridge. That is exactly why sweeping dilation alone returned a local optimum.\n\nIf asked why not more samples: 60 per cell, one editor, one guidance setting. Say so.");}
 
 /* 8 HONEST LIMITS */
 {const s=slide("What we checked on ourselves","Every number here survived an attempt to break it",null);
