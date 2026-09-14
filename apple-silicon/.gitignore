@@ -8,3 +8,8 @@ data/coco/*.parquet
 datagen/pairs/
 train/cache_*.pt
 train/*.pt
+
+# The trained heads are the one thing here that cannot be re-downloaded.
+# *.pt above is for the backbone weights (best.pt, yolov8x-seg.pt), which are
+# downloads. These 18 MB heads are ~21 hours of compute and must be kept.
+!checkpoints/*.pt
