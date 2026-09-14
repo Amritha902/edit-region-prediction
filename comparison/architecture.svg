@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 880" width="1420" height="880">
+<defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker>
+  <style>
+    text{font-family:Helvetica,Arial,sans-serif;fill:#111}
+    .t{font-size:21px;font-weight:700}.h{font-size:13px;font-weight:700;letter-spacing:1.4px}
+    .b{font-size:13px}.s{font-size:11px;fill:#555}.m{font-family:Menlo,monospace;font-size:11.5px}
+    .box{fill:#fff;stroke:#111;stroke-width:1.5}
+    .froz{fill:#efefef;stroke:#111;stroke-width:1.5}
+    .tren{fill:#fff;stroke:#111;stroke-width:3}
+    .ln{stroke:#111;stroke-width:1.5;fill:none;marker-end:url(#a)}
+  </style>
+</defs>
+
+<text class="t" x="40" y="40">Base paper vs ours — same formulation, different scale</text>
+<text class="s" x="40" y="62">Grey = frozen.  Bold outline = trainable.</text>
+<line x1="40" y1="76" x2="1380" y2="76" stroke="#111" stroke-width="1.2"/>
+<line x1="706" y1="100" x2="706" y2="720" stroke="#111" stroke-width="1" stroke-dasharray="6 5"/>
+
+<!-- ================= LEFT : AdaptEdit ================= -->
+<text class="h" x="40" y="108">EXISTING  ·  AdaptEdit  (arXiv:2604.23763, Apr 2026)</text>
+
+<rect class="box" x="40" y="126" width="290" height="44" rx="3"/>
+<text class="b" x="52" y="146">image  +  instruction</text><text class="s" x="52" y="163">"put a hat on the dog"</text>
+
+<rect class="froz" x="40" y="192" width="290" height="70" rx="3"/>
+<text class="b" x="52" y="214">Qwen-Image-Edit  ·  DiT</text>
+<text class="s" x="52" y="232">60 transformer blocks, joint attention</text>
+<text class="s" x="52" y="249">FROZEN  ·  20.43 B parameters</text>
+<path class="ln" d="M185 170 L 185 186"/>
+
+<rect class="tren" x="40" y="286" width="290" height="60" rx="3"/>
+<text class="b" x="52" y="307">MaskPredictor</text>
+<text class="s" x="52" y="324">FiLM cross-attn over 16×16 query grid</text>
+<text class="s" x="52" y="340">7.8 M  ·  BCE + Dice</text>
+<path class="ln" d="M185 262 L 185 280"/>
+
+<rect class="tren" x="40" y="370" width="290" height="56" rx="3"/>
+<text class="b" x="52" y="391">Condition Encoder</text>
+<text class="s" x="52" y="408">mask tokens + Qwen2.5-VL semantics</text>
+<text class="s" x="52" y="421">351 M</text>
+<path class="ln" d="M185 346 L 185 364"/>
+
+<rect class="tren" x="40" y="450" width="290" height="62" rx="3"/>
+<text class="b" x="52" y="471">Block Adapters  ×60</text>
+<text class="s" x="52" y="488">cross-attn + SpatialGate per DiT block</text>
+<text class="s" x="52" y="505">4.67 B</text>
+<path class="ln" d="M185 426 L 185 444"/>
+
+<rect class="box" x="40" y="536" width="290" height="44" rx="3"/>
+<text class="b" x="52" y="557">edited image</text>
+<path class="ln" d="M185 512 L 185 530"/>
+
+<rect x="40" y="606" width="290" height="96" rx="3" fill="#f7f7f7" stroke="#111" stroke-width="1.2"/>
+<text class="h" x="54" y="628" style="font-size:11px">TOTALS</text>
+<text class="b" x="54" y="650">trainable   5.0 B   (24.6% of backbone)</text>
+<text class="b" x="54" y="670">frozen      20.43 B</text>
+<text class="s" x="54" y="690">supervision: MagicBrush human masks</text>
+
+<!-- ================= RIGHT : Ours ================= -->
+<text class="h" x="746" y="108">OURS  ·  text-conditioned prototype coefficients</text>
+
+<rect class="box" x="746" y="126" width="290" height="44" rx="3"/>
+<text class="b" x="758" y="146">image  +  instruction</text><text class="s" x="758" y="163">"put a hat on the dog"</text>
+
+<rect class="froz" x="746" y="192" width="140" height="70" rx="3"/>
+<text class="b" x="756" y="214">FastSAM</text>
+<text class="s" x="756" y="231">YOLOv8x-seg</text>
+<text class="s" x="756" y="248">FROZEN · 71.75 M</text>
+<rect class="froz" x="896" y="192" width="140" height="70" rx="3"/>
+<text class="b" x="906" y="214">CLIP text</text>
+<text class="s" x="906" y="231">ViT-B/32</text>
+<text class="s" x="906" y="248">FROZEN · 512-d</text>
+<path class="ln" d="M840 170 L 820 186"/>
+<path class="ln" d="M940 170 L 960 186"/>
+
+<rect class="froz" x="746" y="286" width="140" height="50" rx="3"/>
+<text class="b" x="756" y="306">32 prototypes</text><text class="s" x="756" y="324">160×160 each</text>
+<path class="ln" d="M816 262 L 816 280"/>
+<rect class="froz" x="896" y="286" width="140" height="50" rx="3"/>
+<text class="b" x="906" y="306">image context</text><text class="s" x="906" y="324">SPPF pooled 640-d</text>
+<path class="ln" d="M966 262 L 966 280"/>
+
+<rect class="tren" x="746" y="370" width="290" height="60" rx="3"/>
+<text class="b" x="758" y="391">TextCoeffHead</text>
+<text class="s" x="758" y="408">FiLM: v = γ(t)·v + β(t)  →  32 coefficients</text>
+<text class="s" x="758" y="424">1.4 M  ·  BCE + 2·Dice</text>
+<path class="ln" d="M900 336 L 890 364"/>
+
+<rect class="box" x="746" y="454" width="290" height="58" rx="3"/>
+<text class="b" x="758" y="475">COMBINE</text>
+<text class="m" x="758" y="498">mask = σ( Σ cᵢ · protoᵢ + b )</text>
+<path class="ln" d="M890 430 L 890 448"/>
+<path class="ln" d="M816 336 L 780 448"/>
+
+<rect class="box" x="746" y="536" width="290" height="44" rx="3"/>
+<text class="b" x="758" y="557">predicted edit region</text>
+<path class="ln" d="M890 512 L 890 530"/>
+
+<rect x="746" y="606" width="290" height="96" rx="3" fill="#f7f7f7" stroke="#111" stroke-width="1.2"/>
+<text class="h" x="760" y="628" style="font-size:11px">TOTALS</text>
+<text class="b" x="760" y="650">trainable   1.4 M   (1.9% of backbone)</text>
+<text class="b" x="760" y="670">frozen      71.75 M</text>
+<text class="s" x="760" y="690">supervision: ΔE-derived from real pairs</text>
+
+<!-- ================= WHAT IS NEW ================= -->
+<line x1="40" y1="730" x2="1380" y2="730" stroke="#111" stroke-width="1.2"/>
+<text class="h" x="40" y="756">WHAT IS NEW</text>
+<text class="b" x="40" y="782">1.  Where the mask comes from.</text>
+<text class="s" x="270" y="782">They decode it from a learned 16×16 query grid. We express it as a text-weighted</text>
+<text class="s" x="270" y="798">combination of the segmenter's own prototypes — no new spatial decoder is learned.</text>
+<text class="b" x="40" y="824">2.  The supervision.</text>
+<text class="s" x="270" y="824">They train on MagicBrush human masks. We measured those at 9.1× too large (precision 15.8%, IoU 0.16);</text>
+<text class="s" x="270" y="840">ours are derived by ΔE from the same real pairs, and reach IoU 0.1632 — above the masks they train on.</text>
+<text class="b" x="40" y="866">3.  The scale.</text>
+<text class="s" x="270" y="866">5.0 B trainable on multi-GPU  →  1.4 M trainable on a MacBook Air.  3,570× fewer trained parameters.</text>
