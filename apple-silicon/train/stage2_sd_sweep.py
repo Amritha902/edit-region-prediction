@@ -45,7 +45,8 @@ for f in sorted(glob.glob(str(ROOT/"data/magicbrush/data/dev-*.parquet"))):
         rows.append(dict(src=src,gt=gt,ins=str(df.instruction.iloc[i])))
         if len(rows)>=a.n: break
     if len(rows)>=a.n: break
-print(f"{len(rows)} samples | dilations {DILS} | thr {a.thr}\n", flush=True)
+print(f"{len(rows)} samples | dilations {DILS} | thresholds "
+      f"{[float(x) for x in a.thrs.split(',')] if a.thrs else [a.thr]}\n", flush=True)
 
 seg=EditRegionModel("best.pt", device=dev)
 ck=torch.load(HERE/f"head_full_v2_s{a.seed}.pt", map_location=dev)
@@ -113,6 +114,11 @@ for thr_ in THRS:
       R,C=float(np.mean(rec)),float(np.mean(coll))
       out[f"{thr_}_{dil}"]=dict(thr=thr_,dil=dil,recall=R,collateral=C,net=R-C,psnr=float(np.mean(ps)),
                     mask_area=float(np.mean(area)),n=len(rec))
+      # Write after every cell. The previous run lost nothing only because the
+      # per-cell lines were in the log; a 3-hour sweep should not depend on that.
+      prev_=json.load(open(HERE/"stage2_sd.json"))["arms"]
+      json.dump(dict(n=a.n,steps=a.steps,arms_fixed=prev_,sweep=out),
+              open(HERE/a.out,"w"), indent=2)
       print(f"  dilate {dil:3d} px -> recall {R:.1%}  collateral {C:.1%}  net {R-C:+.1%}  "
             f"PSNR {np.mean(ps):.2f}  mask area {np.mean(area):.1%}", flush=True)
 

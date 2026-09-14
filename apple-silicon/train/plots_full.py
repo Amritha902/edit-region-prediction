@@ -13,7 +13,11 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy import stats
 
-CEIL={"remove":0.4575,"modify":0.3866,"insert":0.2112}   # exp08 least squares
+# exp08 fitted these by least squares. Use the DEV recomputation from
+# exp12/fix_checks.json, not exp08's train-set numbers: our IoU is measured on
+# dev, and the remove ceiling differs there (0.4325 vs 0.4575).
+CEIL={"remove":0.4324874186422676,"modify":0.3866544426453545,
+      "insert":0.21188534100485198}
 CLIPSEG, HUMAN = 0.1849, 0.1511
 C={"v1":"#5B7DB1","v2":"#C2603F","ceil":"#9aa3ad","ref":"#6b7280"}
 
@@ -122,7 +126,7 @@ for x,kk in zip(xs,kinds):
             color="#5b6470",ha="center",va="bottom")
 ax.set_xticks(xs); ax.set_xticklabels(kinds,fontsize=11)
 ax.set_ylabel("dev IoU"); ax.set_ylim(0,0.52)
-ax.set_title("Per edit kind, against the prototype-basis ceiling (exp08, least squares)",
+ax.set_title("Per edit kind, against the prototype-basis ceiling (least squares, recomputed on dev)",
              fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=9.5,loc="upper left"); ax.grid(axis="y",alpha=0.25)
 ax.set_axisbelow(True)
