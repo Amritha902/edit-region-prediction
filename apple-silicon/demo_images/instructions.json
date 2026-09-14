@@ -1,0 +1,27 @@
+[
+  {
+    "file": "demo_images/modify_140513.png",
+    "instruction": "edit some mountains in the background",
+    "kind": "modify"
+  },
+  {
+    "file": "demo_images/modify_319096.png",
+    "instruction": "Make the piece of paper hanging on the wall a mirror",
+    "kind": "modify"
+  },
+  {
+    "file": "demo_images/insert_253975.png",
+    "instruction": "Add a cruise ship to the ocean.",
+    "kind": "insert"
+  },
+  {
+    "file": "demo_images/remove_557105.png",
+    "instruction": "remove the yellow flowers",
+    "kind": "remove"
+  },
+  {
+    "file": "demo_images/insert_17320.png",
+    "instruction": "add a dog bowl",
+    "kind": "insert"
+  }
+]
