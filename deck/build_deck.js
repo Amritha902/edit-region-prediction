@@ -185,8 +185,9 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  const r=[["Overfits fast","validation IoU peaks at epoch 2–7 then halves by epoch 60, while training loss falls throughout"],
   ["Selection saved it","choosing on a held-out train slice is why the reported numbers hold; the last epoch would have reported half"],
   ["Language is real","zeroing the instruction collapses IoU from 0.188 to ~0.03 — a gap of +0.158"],
-  ["Reproducible","all 6 curve seeds reproduced their 12-seed dev IoU exactly, to four decimals"]];
- tbl(s,r,{x:M+8.15,y:1.86,w:3.48,colW:[1.25,2.23],rowH:0.90,fontSize:9});
+  ["Reproducible","all 6 curve seeds reproduced their 12-seed dev IoU exactly, to four decimals"],
+  ["Headroom is bounded","least squares caps ANY predictor over this basis at 0.2119 insert / 0.3867 modify / 0.4325 remove — we reach 56% / 60% / 46%"]];
+ tbl(s,r,{x:M+8.15,y:1.86,w:3.48,colW:[1.2,2.28],rowH:0.74,fontSize:8.5});
  tint(s,M,6.22,CW,0.85);
  s.addText("Latency, resolution-matched at CLIPSeg's native 352 px:  v2 per-instruction 5.30 ms vs 54.3 ms = 10.3×, at 32× fewer trainable parameters.  The backbone runs once per image (33.6 ms); each further instruction costs only the head.",
   {x:M+0.32,y:6.40,w:CW-0.64,h:0.56,fontFace:BODY,fontSize:11,color:INK,lineSpacing:15,margin:0});
@@ -225,7 +226,7 @@ function tbl(s,rows,opt){opt=opt||{};const ctr=opt.centerCols||[],hi=opt.hiRows|
  tint(s,M,4.15,CW,0.9);
  s.addText([{text:"We now beat the human annotation",options:{bold:true}},
   {text:"  —  +39.5% against +26.8%, reversing the one comparison the compositing test lost. And collateral 22.2% is "},
-  {text:"below",options:{bold:true}},{text:" whole-frame editing's 24.2%, so we win on both quantities rather than trading one for the other."}],
+  {text:"below",options:{bold:true}},{text:" whole-frame editing's 24.2%, so we win on both quantities rather than trading one for the other. The oracle at +53.0% bounds what a perfect region would buy."}],
   {x:M+0.32,y:4.36,w:CW-0.64,h:0.62,fontFace:BODY,fontSize:11.5,color:INK,lineSpacing:16,margin:0});
  lab(s,M,5.20,10,"The operating point had to be found jointly");
  const g=[["","0 px","16 px","32 px","48 px","64 px"],
