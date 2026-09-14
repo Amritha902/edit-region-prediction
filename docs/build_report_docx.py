@@ -267,6 +267,28 @@ para(d,"A joint threshold and dilation search costs several hours of diffusion, 
 para(d,"We calibrated J against the four cells already measured with diffusion. It does not hold: the Pearson correlation between J and measured net is 0.318, and the ranking of the four cells is not preserved. The proxy is therefore unusable for selecting an operating point, and we report it because the negative result is what justifies spending the compute on a real sweep.")
 para(d,"The failure is informative about the editor. Inpainting does not repaint a masked region uniformly: some regenerated content resembles the original closely enough to fall below the colour-difference threshold, so change-recall is lower than mask recall, and the VAE round-trip perturbs pixels outside the mask, so collateral is not purely a function of mask geometry. Any future attempt to choose this operating point cheaply has to model those two effects rather than assume them away.")
 
+para(d,"")
+d.add_heading("8.3  The joint operating point", level=2)
+para(d,"Sweeping dilation alone found 16 px optimal, but only at the threshold we happened to have fixed. Threshold and dilation are not independent: a higher threshold produces a smaller raw mask, which then needs more dilation to reach the same coverage. We therefore swept both, twenty cells in total, on the same sixty samples with the other arms held fixed.")
+table(d,"Table 19. Net improvement across the threshold and dilation grid. Twenty cells, sixty samples each.",
+ ["Threshold","0 px","16 px","32 px","48 px","64 px"],
+ [["0.2","+31.2%","+36.9%","+36.7%","+35.7%","+32.7%"],
+  ["0.3","+28.6%","+36.5%","+39.5%","+37.9%","+33.3%"],
+  ["0.4","+26.5%","+34.9%","+38.4%","+39.4%","+35.9%"],
+  ["0.5","+24.2%","+32.8%","+36.2%","+38.4%","+37.9%"]],
+ widths=[1.1,1.1,1.1,1.1,1.1,1.1], bold_rows=(1,))
+table(d,"Table 20. Collateral change across the same grid. Whole-frame editing is 24.2 percent.",
+ ["Threshold","0 px","16 px","32 px","48 px","64 px"],
+ [["0.2","14.1%","20.6%","27.6%","34.5%","40.4%"],
+  ["0.3","11.8%","16.4%","22.2%","28.2%","34.9%"],
+  ["0.4","9.9%","13.7%","18.5%","24.1%","29.2%"],
+  ["0.5","9.1%","12.0%","15.9%","20.4%","25.3%"]],
+ widths=[1.1,1.1,1.1,1.1,1.1,1.1])
+para(d,"The optimum is threshold 0.3 with 32 px of dilation, giving +39.5 percent net at 61.7 percent recall and 22.2 percent collateral. It is interior on both axes: net falls away in all four directions, so it is a genuine maximum of the grid rather than a value sitting against its edge.")
+para(d,"The structure of the surface is the more useful result. Each row has its own interior peak, and the optimal dilation rises with the threshold — 16 px at 0.2, 32 px at 0.3, 48 px at both 0.4 and 0.5. The two parameters trade against one another along a ridge, which is precisely why sweeping dilation alone returned a local optimum: 16 px was optimal only at the threshold that sweep held fixed. Collateral, by contrast, is monotonic in both parameters, rising with dilation and falling with threshold, so it carries no optimum of its own and cannot be used to locate one.")
+para(d,"Against the untuned setting carried over from the compositing experiment, tuning is worth 7.5 points of net: +39.5 percent against +32.0 percent. Collateral falls from 39.1 to 22.2 percent, which is below the 24.2 percent of whole-frame editing, so the tuned system now exceeds the status quo on both quantities rather than trading one against the other. The margin over the human annotation widens from +26.8 to a clear gap, and the oracle at +53.0 percent still bounds what a perfect region would buy.")
+para(d,"Two neighbouring cells are worth recording because they may suit a different priority. Threshold 0.4 with 48 px gives +39.4 percent, statistically indistinguishable from the optimum, at 24.1 percent collateral. Threshold 0.5 with 48 px gives +38.4 percent at 20.4 percent collateral — 1.1 points less net for 1.8 points less damage. Where preservation outside the region matters more than completeness of the edit, that is the better operating point.")
+
 d.add_heading("9  Validation and Corrective Actions", level=1)
 para(d,"We made four corrections during the work. They are recorded because the alternative would render the surviving results unverifiable.")
 para(d,"First, an overnight script contained a copy operation that merged the development partition into the training cache, so that the model was trained on the partition it was subsequently evaluated on. We found it when a baseline scored 0.3743 against a training-time 0.1397, a discrepancy too large to be attributable to a difference in metric. We withdrew the affected headline and the claim that our supervision beat human annotation, then re-established both on a disjoint split.")

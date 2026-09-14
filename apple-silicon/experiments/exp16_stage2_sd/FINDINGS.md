@@ -73,3 +73,60 @@ Seconds of compute per sample, at a fixed workload, drifted 76 → 93 → 111 �
 temperature is not readable without sudo; throughput drift at a fixed workload
 is a usable proxy and needs no privileges. The battery sensor read ~31 °C
 throughout and was not informative about the SoC.
+
+
+## Joint threshold x dilation grid — the real optimum
+
+Dilation alone gave 16 px, but only at the threshold that sweep held fixed.
+Sweeping both, 20 cells, same 60 samples, other arms held fixed:
+
+**Net**
+
+| thr \ dil | 0 px | 16 px | 32 px | 48 px | 64 px |
+|---|---:|---:|---:|---:|---:|
+| 0.2 | +31.2% | +36.9% | +36.7% | +35.7% | +32.7% |
+| 0.3 | +28.6% | +36.5% | **+39.5%** | +37.9% | +33.3% |
+| 0.4 | +26.5% | +34.9% | +38.4% | +39.4% | +35.9% |
+| 0.5 | +24.2% | +32.8% | +36.2% | +38.4% | +37.9% |
+
+**Collateral** (whole-frame is 24.2%)
+
+| thr \ dil | 0 px | 16 px | 32 px | 48 px | 64 px |
+|---|---:|---:|---:|---:|---:|
+| 0.2 | 14.1% | 20.6% | 27.6% | 34.5% | 40.4% |
+| 0.3 | 11.8% | 16.4% | **22.2%** | 28.2% | 34.9% |
+| 0.4 | 9.9% | 13.7% | 18.5% | 24.1% | 29.2% |
+| 0.5 | 9.1% | 12.0% | 15.9% | 20.4% | 25.3% |
+
+**Optimum: threshold 0.3, dilation 32 px.** Net +39.5%, recall 61.7%,
+collateral 22.2%, PSNR 17.63. Interior on both axes — net falls away in all four
+directions, so it is a maximum of the grid and not a value against its edge.
+
+### The shape matters more than the maximum
+
+Every row has its own interior peak and **the optimal dilation rises with the
+threshold**: 16 px at 0.2, 32 px at 0.3, 48 px at 0.4 and 0.5. A higher
+threshold gives a smaller raw mask which needs more dilation to reach the same
+coverage, so the two parameters trade along a ridge. That is exactly why the
+dilation-only sweep found a local optimum: 16 px was best only at threshold 0.2.
+
+Collateral is monotonic in both parameters — up with dilation, down with
+threshold — so it has no optimum of its own and cannot locate one.
+
+### Against the untuned setting
+
+Tuning is worth **7.5 points**: +39.5% against the +32.0% carried over from
+exp13. Collateral falls 39.1% -> 22.2%, below whole-frame's 24.2%, so the tuned
+system beats the status quo on both quantities instead of trading one for the
+other.
+
+### Neighbours worth knowing
+
+- thr 0.4 / 48 px: +39.4% at 24.1% collateral — indistinguishable in net
+- thr 0.5 / 48 px: +38.4% at 20.4% collateral — 1.1 points less net for 1.8
+  points less damage. Better where preservation matters more than completeness.
+
+### Caveat
+
+60 samples per cell, one editor, one guidance setting. The surface is well
+behaved, but that is a small basis for a 20-cell comparison.
