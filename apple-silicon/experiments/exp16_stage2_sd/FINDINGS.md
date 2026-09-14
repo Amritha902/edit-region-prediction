@@ -31,9 +31,32 @@ shows what precision buys instead — 6.4% collateral at +53.0% net.
 
 The cause is the operating point. We carried 64 px of dilation over from exp13,
 where enlarging the mask can only recover more of the edit. Under inpainting an
-over-large mask regenerates content that should have been preserved, so the
-dilation that helped there hurts here. Threshold and dilation need re-tuning for
-this setting; the figure above is the untuned one and is reported as such.
+over-large mask regenerates content that should have been preserved.
+
+## Re-tuned: 16 px, and the problem goes away
+
+Dilation swept for the predicted arm only; A, C and D held fixed on the same 60
+samples.
+
+| dilation | mask area | recall | collateral | net | PSNR out |
+|---:|---:|---:|---:|---:|---:|
+| 0 px | 22.4% | 46.5% | 16.1% | +30.4% | 20.07 |
+| **16 px** | 36.2% | 58.6% | **23.0%** | **+35.5%** | 17.46 |
+| 32 px | 47.1% | 65.6% | 30.8% | +34.8% | 15.44 |
+| 64 px | - | 71.1% | 39.1% | +32.0% | 14.11 |
+
+Net goes +30.4 -> +35.5 -> +34.8 -> +32.0: up then down, so **16 px is an
+interior optimum**, not the edge of the search.
+
+At 16 px collateral is **23.0%, below whole-frame's 24.2%**. The awkward part of
+the first result is gone: we beat the status quo on net AND on collateral rather
+than buying net with damage. PSNR outside recovers 3.3 dB, and the margin over
+the human mask widens to +35.5% against +26.8%.
+
+**Still open.** Even undilated the mask covers 22.4% of the frame against a true
+9.6%, so at threshold 0.2 it over-covers 2.3x before any dilation. Threshold and
+dilation are not independent; a joint sweep is the next refinement. The oracle at
+6.4% collateral and +53.0% net shows the headroom.
 
 ## Note on a reporting bug caught here
 

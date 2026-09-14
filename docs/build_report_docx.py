@@ -250,8 +250,17 @@ table(d,"Table 17. Stage 2 with Stable Diffusion inpainting. Sixty held-out samp
   ["Ground-truth region (oracle)","59.4%","6.4%","+53.0%","27.36","0.2464"]],
  widths=[2.0,0.9,1.1,0.85,1.1,1.0], bold_rows=(1,))
 para(d,"Two results differ from the compositing experiment. Localization is worth more here, a factor of 5.8 against 3.3, because an inpainting model conditioned on a correct region can synthesise content rather than merely pass an edit through a stencil. And the predicted mask now exceeds the human annotation, +32.0 percent against +26.8, reversing the ordering we reported above.")
-para(d,"The qualification matters more than either result. We win on net by raising recall to 71.1 percent, not by reducing collateral: collateral rises to 39.1 percent against 24.2 percent for whole-frame editing, a factor of 1.62 in the wrong direction, and PSNR outside the region falls by 8.45 dB. The oracle shows what a tight mask buys instead — 6.4 percent collateral at +53.0 percent net.")
-para(d,"The cause is the operating point, not the method. We carried over 64 px of dilation from the compositing experiment, where enlarging the mask can only ever recover more of the edit. Under inpainting an over-large mask regenerates content that should have been preserved, so the same dilation that helped there hurts here. Re-tuning dilation and threshold for the inpainting setting is the obvious next measurement, and we report the untuned figure rather than omit the arm.")
+para(d,"At 64 px the win came with a problem. We raised net by pushing recall to 71.1 percent, not by reducing collateral: collateral rose to 39.1 percent against 24.2 percent for whole-frame editing, and PSNR outside the region fell 8.45 dB. We had carried that 64 px over from the compositing experiment, where enlarging a mask can only recover more of the edit and so costs nothing. Under inpainting the mask decides what gets regenerated, so an over-large one destroys content that should have been kept.")
+para(d,"Re-tuning dilation for this setting confirms that diagnosis.")
+table(d,"Table 18. Dilation swept for the predicted mask under inpainting. The other arms are held fixed at the values in Table 15, on the same sixty samples.",
+ ["Dilation","Mask area","Recall","Collateral","Net","PSNR outside"],
+ [["0 px","22.4%","46.5%","16.1%","+30.4%","20.07"],
+  ["16 px","36.2%","58.6%","23.0%","+35.5%","17.46"],
+  ["32 px","47.1%","65.6%","30.8%","+34.8%","15.44"],
+  ["64 px","—","71.1%","39.1%","+32.0%","14.11"]],
+ widths=[1.0,1.1,0.9,1.1,0.9,1.2], bold_rows=(1,))
+para(d,"Net traces +30.4, +35.5, +34.8 and +32.0 across the four settings, rising and then falling, so 16 px is an interior optimum and not the edge of the search. There the predicted mask reaches +35.5 percent net at 23.0 percent collateral, which is below the 24.2 percent of whole-frame editing. The earlier problem disappears: we now exceed the status quo on both quantities at once instead of buying net with damage, and PSNR outside recovers 3.3 dB. The margin over the human annotation widens to +35.5 against +26.8.")
+para(d,"One thing the sweep makes visible. Even undilated the predicted mask covers 22.4 percent of the frame against a true changed area of 9.6 percent, so at threshold 0.2 it over-covers by a factor of 2.3 before any dilation. Threshold and dilation are not independent here, and a joint sweep is the next refinement. The oracle, at 6.4 percent collateral and +53.0 percent net, shows how much is still available.")
 
 d.add_heading("9  Validation and Corrective Actions", level=1)
 para(d,"We made four corrections during the work. They are recorded because the alternative would render the surviving results unverifiable.")
