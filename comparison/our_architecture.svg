@@ -136,3 +136,4 @@
 <text class="meta" x="56" y="928">Not "a better edit-region predictor". A measured, mechanistic explanation of why insertion is hard in prototype-based segmenters —</text>
 <text class="meta" x="56" y="944">which plausibly extends to AdaptEdit, whose mask is also decoded from an object-trained backbone and whose stated limitation is insertion.</text>
 <text class="meta" x="56" y="966" style="fill:#1B7A4B;font-weight:600">Next experiment: do k learned free-space prototypes raise the insert ceiling above 0.21?</text>
+</svg>

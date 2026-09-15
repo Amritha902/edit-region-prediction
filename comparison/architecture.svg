@@ -115,3 +115,4 @@
 <text class="s" x="270" y="840">ours are derived by ΔE from the same real pairs, and reach IoU 0.1632 — above the masks they train on.</text>
 <text class="b" x="40" y="866">3.  The scale.</text>
 <text class="s" x="270" y="866">5.0 B trainable on multi-GPU  →  1.4 M trainable on a MacBook Air.  3,570× fewer trained parameters.</text>
+</svg>
