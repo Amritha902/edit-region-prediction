@@ -11,6 +11,8 @@ HERE=Path(__file__).resolve().parent; ROOT=HERE.parent
 import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import sys as _s; _s.path.insert(0,"/Users/amritha/DATASCIENCE FINAL/report")
+import figstyle as FS; FS.use()
 from scipy import stats
 
 # exp08 fitted these by least squares. Use the DEV recomputation from
@@ -19,7 +21,7 @@ from scipy import stats
 CEIL={"remove":0.4324874186422676,"modify":0.3866544426453545,
       "insert":0.21188534100485198}
 CLIPSEG, HUMAN = 0.1849, 0.1511
-C={"v1":"#5B7DB1","v2":"#C2603F","ceil":"#9aa3ad","ref":"#6b7280"}
+C={"v1":"#C65A16","v2":"#1F6FB2","ceil":"#C9C5BC","ref":"#6B6862"}
 
 def load():
     g={}
@@ -74,7 +76,7 @@ ax.text(-0.46,HUMAN+0.0017,"MagicBrush human masks 0.1511",
 ax.set_xticks(range(len(keys)))
 ax.set_xticklabels([f"{t}\nn={n:,}" for t,n in keys],fontsize=10.5)
 ax.set_ylabel("dev IoU (full resolution, 503 turns)")
-ax.set_title("Every seed, side by side — 12 seeds per configuration",
+ax.set_title("Dev IoU per seed, by head and training-set size",
              fontsize=12,fontweight="bold",loc="left")
 ax.set_xlim(-0.5,len(keys)-0.5)
 ax.grid(axis="y",alpha=0.25); ax.set_axisbelow(True)
@@ -126,7 +128,7 @@ for x,kk in zip(xs,kinds):
             color="#5b6470",ha="center",va="bottom")
 ax.set_xticks(xs); ax.set_xticklabels(kinds,fontsize=11)
 ax.set_ylabel("dev IoU"); ax.set_ylim(0,0.52)
-ax.set_title("Per edit kind, against the prototype-basis ceiling (least squares, recomputed on dev)",
+ax.set_title("Dev IoU by edit kind, against the least-squares ceiling",
              fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=9.5,loc="upper left"); ax.grid(axis="y",alpha=0.25)
 ax.set_axisbelow(True)
@@ -143,10 +145,10 @@ for i,k in enumerate(show):
         ax.text(val+1.2,y_,f"{val:.0f}%",va="center",fontsize=9)
 ax.set_yticks(range(len(kinds))); ax.set_yticklabels(kinds,fontsize=10.5)
 ax.set_xlabel("% of the ceiling reached"); ax.set_xlim(0,80)
-ax.set_title("Headroom used",fontsize=12,fontweight="bold",loc="left")
+ax.set_title("Fraction of the ceiling reached",fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=9); ax.grid(axis="x",alpha=0.25); ax.set_axisbelow(True)
 
-fig.suptitle("Stage 1 — scaling the training set 3.65× (2,278 → 8,306 samples)",
+fig.suptitle("Stage 1: dev IoU at 2,278 and 8,306 training samples",
              fontsize=15,fontweight="bold",x=0.055,ha="left",y=0.965)
 out=ROOT/"implementation/results_full.png"; out.parent.mkdir(exist_ok=True)
 fig.savefig(out,dpi=155,bbox_inches="tight",facecolor="white")

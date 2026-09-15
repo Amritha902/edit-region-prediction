@@ -11,10 +11,12 @@ HERE=Path(__file__).resolve().parent; ROOT=HERE.parent
 import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+sys.path.insert(0,"/Users/amritha/DATASCIENCE FINAL/report")
+import figstyle as FS; FS.use()
 
 D=json.load(open(HERE/"curves_full.json"))
-CFG={"v2 spatial":("#C2603F","v2 spatial field"),
-     "v1 global coeff":("#5B7DB1","v1 global coefficients")}
+CFG={"v2 spatial":("#1F6FB2","v2 spatial field"),
+     "v1 global coeff":("#C65A16","v1 global coefficients")}
 
 def stack(cfg,key):
     rs=[r for r in D if r["config"]==cfg]
@@ -42,7 +44,7 @@ for cfg in CFG:
         ax.plot(b,r["curve"][b-1]["val_iou"],"v",color=c,ms=9,zorder=5,
                 markeredgecolor="white",markeredgewidth=0.8)
 ax.set_xlabel("epoch"); ax.set_ylabel("validation IoU (held-out train slice)")
-ax.set_title("Validation IoU peaks in the first few epochs, then decays",
+ax.set_title("Validation IoU by epoch",
              fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=10); ax.grid(alpha=0.25); ax.set_axisbelow(True)
 ax.annotate("▼ = epoch actually selected",xy=(0.97,0.93),xycoords="axes fraction",
@@ -62,7 +64,7 @@ lo=min(stack(c,"val_iou")[0][:,:15].min() for c in CFG)
 hi=max(stack(c,"val_iou")[0][:,:15].max() for c in CFG)
 ax.set_ylim(lo-0.004,hi+0.006)
 ax.set_xlabel("epoch"); ax.set_ylabel("validation IoU")
-ax.set_title("Zoom: epochs 1–15, where every checkpoint was chosen",
+ax.set_title("Validation IoU, epochs 1 to 15",
              fontsize=12,fontweight="bold",loc="left")
 ax.grid(alpha=0.25); ax.set_axisbelow(True)
 
@@ -70,7 +72,7 @@ ax.grid(alpha=0.25); ax.set_axisbelow(True)
 ax=fig.add_subplot(gs[1,0])
 for cfg in CFG: band(ax,cfg,"loss")
 ax.set_xlabel("epoch"); ax.set_ylabel("training loss (BCE + 2×Dice)")
-ax.set_title("Training loss keeps falling while validation IoU falls too — overfitting",
+ax.set_title("Training loss by epoch",
              fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=10); ax.grid(alpha=0.25); ax.set_axisbelow(True)
 
@@ -79,11 +81,11 @@ ax=fig.add_subplot(gs[1,1])
 for cfg in CFG:
     c,lab=CFG[cfg]
     A,_=stack(cfg,"val_iou"); N,_=stack(cfg,"val_iou_no_text")
-    ax.plot(ep,A.mean(0),color=c,lw=2.0,label=f"{lab} — with instruction")
+    ax.plot(ep,A.mean(0),color=c,lw=2.0,label=f"{lab}, with instruction")
     ax.plot(ep,N.mean(0),color=c,lw=1.6,ls="--",alpha=0.8,
-            label=f"{lab} — instruction zeroed")
+            label=f"{lab}, instruction zeroed")
 ax.set_xlabel("epoch"); ax.set_ylabel("validation IoU")
-ax.set_title("Language ablation: the instruction carries real signal throughout",
+ax.set_title("Validation IoU with and without the instruction",
              fontsize=12,fontweight="bold",loc="left")
 ax.legend(frameon=False,fontsize=8.8); ax.grid(alpha=0.25); ax.set_axisbelow(True)
 

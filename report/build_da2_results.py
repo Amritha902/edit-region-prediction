@@ -29,6 +29,15 @@ titlepage(d, "Results and Evidence",
           course="Foundations of Data Science · DA2",
           date="15 September 2026")
 
+rp=d.add_paragraph(); rp.alignment=WD_ALIGN_PARAGRAPH.CENTER
+rr=rp.add_run("Code and data: "); rr.font.size=Pt(10.5); rr.font.color.rgb=MUTE
+hyperlink(rp,"https://github.com/Amritha902/edit-region-prediction","https://github.com/Amritha902/edit-region-prediction",size=10.5)
+rp.paragraph_format.space_after=Pt(4)
+rp2=d.add_paragraph(); rp2.alignment=WD_ALIGN_PARAGRAPH.CENTER
+rr2=rp2.add_run("Every table and figure in this document is generated from the committed result files by report/build_da2_results.py.")
+rr2.font.size=Pt(9.5); rr2.italic=True; rr2.font.color.rgb=MUTE
+rp2.paragraph_format.space_after=Pt(16)
+
 toc(d, [("1","Data Collection and Understanding",1),
         ("2","Data Preprocessing",1),
         ("3","Feature Engineering and Selection",1),
@@ -140,6 +149,11 @@ table(d,"Table 2.2  The preprocessing chain, in order.",
 B(["The threshold of 12.0 was not chosen by eye. It came from a noise robustness sweep and holds at sigma 8.",
    "The idea in one line: where a hat landed is ground truth for where a hat should go."])
 
+figure(d, str(F/"DA2_figures/pipeline.png"),
+       "Figure 2.1  The preprocessing chain on three held-out samples. Every panel is the actual "
+       "array at that step. The final column is the dataset's own annotation at the same scale, "
+       "which is what the ratio in Table 1.4 measures.")
+
 H2("2.4  Encoding")
 B(["Text: instructions go through CLIP BPE tokenisation to a 512-d vector, L2 normalised.",
    "Categorical: the edit kind is derived by rule from the leading verb. put or add gives insert, remove or delete gives remove, everything else gives modify.",
@@ -161,6 +175,10 @@ table(d,"Table 3.1  The four feature sources.",
   ["Text embedding","(B, 512)","CLIP ViT-B/32 text encoder","no"],
   ["Geometric basis","(12, 160, 160)","fixed closed form","no"]],
  widths=[1.6,1.7,2.0,0.9], align=["left","left","left","right"])
+
+figure(d, str(F/"DA2_figures/basis.png"),
+       "Figure 3.1  The basis the head combines: 32 image-dependent prototypes and 12 fixed "
+       "geometric functions. No single prototype is the answer to an instruction; a combination is.")
 
 H2("3.2  The engineered geometric basis")
 B(["12 fixed smooth functions appended to the 32 prototypes: 1, x, y, x squared, y squared, xy, x cubed, y cubed, sin(pi x), sin(pi y), cos(pi x), cos(pi y), on a grid normalised to minus 1 through 1.",
@@ -359,6 +377,10 @@ B([f"Editing inside our predicted region gives net {pc(s2['B our mask']['net'])}
    f"It also beats MagicBrush's own masks ({pc(s2['D MagicBrush mask']['net'])}), which is the supervision the base paper uses.",
    f"Perfect localization would give {pc(s2['C GT mask']['net'])}, so there is headroom left."])
 
+figure(d, str(F/"DA2_figures/stage2.png"),
+       "Figure 5.3  Stage 2 in full: the four gating strategies, net gain, the precision and recall "
+       "frontier, inference cost, and all 20 operating points.")
+
 H2("5.8  Operating-point sweep")
 N("A 20-cell grid over threshold and dilation. The optimum is interior on both axes, "
   "which means it is a real optimum and not an artefact of the search range.")
@@ -383,11 +405,11 @@ B([f"Best cell: threshold 0.3 with 32 px dilation. Net {pc(best['net'])}, recall
    "References: whole frame +9.1%, MagicBrush +26.8%, oracle +53.0%."])
 
 figure(d, str(F/"grid_heatmap.png"),
-       "Figure 5.3  The threshold and dilation grid. The optimum is interior on both axes.")
+       "Figure 5.4  The threshold and dilation grid. The optimum is interior on both axes.")
 
 H2("5.9  Qualitative")
 figure(d, str(F/"qualitative_full.png"),
-       "Figure 5.4  Predictions on held-out dev images, deduplicated by photograph. "
+       "Figure 5.5  Predictions on held-out dev images, deduplicated by photograph. "
        "Source, instruction, derived target, and prediction.")
 
 B(["Mask coverage varies a lot by image: 9.5% on the cleanest case and 56.3% on a dense close-up where the model over-predicts badly.",
@@ -396,7 +418,11 @@ B(["Mask coverage varies a lot by image: 9.5% on the cleanest case and 56.3% on 
 # ════════════════════════════════════════════════════════════ 6
 H1("6  Code Quality and Documentation")
 
-B(["Repository: github.com/Amritha902/edit-region-prediction. Every experiment, checkpoint and figure is committed.",
+rp=d.add_paragraph(); rr=rp.add_run("Repository: "); rr.font.size=Pt(10.5)
+hyperlink(rp,"https://github.com/Amritha902/edit-region-prediction","https://github.com/Amritha902/edit-region-prediction",size=10.5)
+rp.paragraph_format.space_after=Pt(6)
+
+B(["Every experiment, checkpoint, figure and result file is committed.",
    "Each module opens with a docstring stating why the thing exists, not only what it does.",
    "Seeds are fixed and stored inside each checkpoint alongside n_train and dev_iou, so any number traces back to the run that produced it.",
    "Long jobs are resumable. The precompute checkpoints after every batch. The sweep runs one cell per job with a resume guard, added after three runs died at session teardown.",
