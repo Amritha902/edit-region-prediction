@@ -1,6 +1,6 @@
 # Review 1 — submission documents
 
-Four deliverables, plus the scripts that build them.
+Five deliverables, plus the scripts that build them.
 
 | File | What it is |
 |---|---|
@@ -8,6 +8,7 @@ Four deliverables, plus the scripts that build them.
 | `Review1_Literature_Survey.docx` | 45 works, 2024–2026, nine clusters. 41 clickable paper links, cost analysis, and what each line of work leaves unmeasured. |
 | `Review1_Consolidated_Report.docx` | All 13 experiments, the four corrective actions, repository map, open problems. |
 | `ISE_Review1_Final.pptx` | 13 slides with full speaker notes. |
+| `DA2_Report.docx` | DA2 submission — Introduction, Literature Survey, Methodology. 7 tables, 3 figures, 45 references all cited in text. |
 
 ## Rebuilding
 
@@ -18,7 +19,13 @@ between documents:
 python build_report_docx.py
 python build_survey_docx.py
 python build_consolidated_docx.py
+python build_da2_report.py
 ```
+
+`build_da2_report.py` reads the reference list straight from
+`../literature/Literature_Survey_Matrix.xlsx` rather than from a temporary file,
+and resolves in-text citations from short tokens at build time, so a reference
+number cannot drift from the work it points at. It runs from any directory.
 
 `mkdocx.py` holds the shared layout: title page, contents, booktabs tables,
 figures and real hyperlinks. Every figure comes from `../apple-silicon/train/`
